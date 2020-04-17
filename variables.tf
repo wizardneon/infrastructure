@@ -7,3 +7,13 @@ variable "aws_region" {
   default = "eu-west-1"
   type    = string
 }
+
+variable "k8s_bastion_node_instance_type" {
+  default = "t2.nano"
+  type    = string
+}
+
+variable "k8s_bastion_node_ami" {
+  default = "ami-035966e8adab4aaad"
+  type    = string
+}

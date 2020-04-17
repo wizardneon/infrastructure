@@ -97,7 +97,13 @@ resource "aws_eks_node_group" "k8s" {
   ]
 }
 
-#bastion_node
+resource "aws_instance" "k8s_bastion_node" {
+
+  ami              = var.k8s_bastion_node_ami
+  instance_type    = var.k8s_bastion_node_instance_type
+  tags {
+    Name = "k8s_bastion_node"
+  }
 
 
 resource "aws_iam_role" "k8s_bastion_node" {
@@ -129,3 +135,5 @@ resource "aws_iam_role_policy_attachment" "k8s_bastion_node-AmazonEC2FullAccess"
 depends_on = [
   aws_iam_role_policy_attachment.k8s_bastion_node-AmazonEC2FullAccess
 ]
+
+}
