@@ -96,3 +96,5 @@ resource "aws_eks_node_group" "k8s" {
     aws_iam_role_policy_attachment.k8s-worker-node-AmazonEC2ContainerRegistryReadOnly,
   ]
 }
+
+#bastion_node
