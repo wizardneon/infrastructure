@@ -98,3 +98,34 @@ resource "aws_eks_node_group" "k8s" {
 }
 
 #bastion_node
+
+
+resource "aws_iam_role" "k8s_bastion_node" {
+  name = "k8s_bastion_node"
+
+  assume_role_policy = <<EOF
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": "sts:AssumeRole",
+          "Principal": {
+            "Service": "ec2.amazonaws.com"
+          },
+          "Effect": "Allow",
+          "Sid": ""
+        }
+      ]
+    }
+EOF
+}
+
+
+resource "aws_iam_role_policy_attachment" "k8s_bastion_node-AmazonEC2FullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+  role       = aws_iam_role.k8s_bastion_node.name
+}
+
+depends_on = [
+  aws_iam_role_policy_attachment.k8s_bastion_node-AmazonEC2FullAccess
+]
