@@ -78,6 +78,7 @@ resource "aws_iam_role_policy_attachment" "k8s-worker-node-AmazonEC2ContainerReg
   role       = aws_iam_role.k8s-worker-node.name
 }
 
+
 resource "aws_eks_node_group" "k8s" {
   cluster_name    = aws_eks_cluster.k8s.name
   node_group_name = "k8s"
@@ -97,14 +98,23 @@ resource "aws_eks_node_group" "k8s" {
   ]
 }
 
+
+#k8s_bastion_node
 resource "aws_instance" "k8s_bastion_node" {
 
   ami              = var.k8s_bastion_node_ami
   instance_type    = var.k8s_bastion_node_instance_type
-  tags {
+  key_name         = var.k8s_bastion_node_key_name
+  security_groups  = [aws_security_group.k8s-bastion-node.id]
+  tags = {
     Name = "k8s_bastion_node"
   }
-
+}
+#elastic_ip for Bastion node
+resource "aws_eip" "default" {
+  instance = aws_instance.k8s_bastion_node.id
+  vpc      = true
+}
 
 resource "aws_iam_role" "k8s_bastion_node" {
   name = "k8s_bastion_node"
@@ -126,14 +136,7 @@ resource "aws_iam_role" "k8s_bastion_node" {
 EOF
 }
 
-
 resource "aws_iam_role_policy_attachment" "k8s_bastion_node-AmazonEC2FullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
   role       = aws_iam_role.k8s_bastion_node.name
-}
-
-depends_on = [
-  aws_iam_role_policy_attachment.k8s_bastion_node-AmazonEC2FullAccess
-]
-
 }
