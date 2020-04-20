@@ -102,16 +102,17 @@ resource "aws_eks_node_group" "k8s" {
 #k8s_bastion_node
 resource "aws_instance" "k8s_bastion_node" {
 
-  ami              = var.k8s_bastion_node_ami
-  instance_type    = var.k8s_bastion_node_instance_type
-  key_name         = var.k8s_bastion_node_key_name
-  security_groups  = [aws_security_group.k8s-bastion-node.id]
+  ami                     = var.k8s_bastion_node_ami
+  instance_type           = var.k8s_bastion_node_instance_type
+  key_name                = var.k8s_bastion_node_key_name
+  subnet_id               = aws_subnet.k8s[0].id
+  vpc_security_group_ids  = [aws_security_group.k8s-bastion-node.id]
   tags = {
     Name = "k8s_bastion_node"
   }
 }
 #elastic_ip for Bastion node
-resource "aws_eip" "default" {
+resource "aws_eip" "bastion_eip" {
   instance = aws_instance.k8s_bastion_node.id
   vpc      = true
 }
@@ -119,21 +120,20 @@ resource "aws_eip" "default" {
 resource "aws_iam_role" "k8s_bastion_node" {
   name = "k8s_bastion_node"
 
-  assume_role_policy = <<EOF
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
     {
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Action": "sts:AssumeRole",
-          "Principal": {
-            "Service": "ec2.amazonaws.com"
-          },
-          "Effect": "Allow",
-          "Sid": ""
-        }
-      ]
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
     }
-EOF
+  ]
+}
+POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "k8s_bastion_node-AmazonEC2FullAccess" {
