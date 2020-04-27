@@ -1,10 +1,10 @@
-image:
+ image:
   name: hashicorp/terraform:light
   entrypoint:
     - '/usr/bin/env'
     - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 
-stages:
+ stages:
   - build
   - deploy
   - destroy
@@ -18,13 +18,13 @@ stages:
   - terraform --version
   - terraform init
 
-build:
+ build:
   stage: build
   script:
     - terraform validate
     - terraform plan
 
-deploy:
+ deploy:
   stage: deploy
   script:
     - terraform apply -auto-approve=true
@@ -35,7 +35,7 @@ deploy:
     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "cd terraform-eks-cluster-deployment && kubectl deploy -f simple-app.yaml"
 
 
-destroy:
+ destroy:
   stage: destroy
   script:
     - terraform destroy -force -auto-approve
