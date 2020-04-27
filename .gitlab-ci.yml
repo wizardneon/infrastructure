@@ -1,41 +1,40 @@
  image:
-  name: hashicorp/terraform:light
-  entrypoint:
-    - '/usr/bin/env'
-    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+   name: hashicorp/terraform:light
+   entrypoint:
+     - '/usr/bin/env'
+     - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 
-stages:
-  - build
-  - deploy
-  - destroy
+ stages:
+   - build
+   - deploy
+   - destroy
 
-before_script:
-  - mkdir -p ~/.ssh && chmod 700 ~/.ssh
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-  - chmod 600 ~/.ssh/id_rsa
-  - eval $(ssh-agent -s)
-  - terraform --version
-  - terraform init
+ before_script:
+   - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+   - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+   - chmod 600 ~/.ssh/id_rsa
+   - eval $(ssh-agent -s)
+   - terraform --version
+   - terraform init
 
-build:
-  stage: build
-  script:
-    - terraform validate
-    - terraform plan
+ build:
+   stage: build
+   script:
+     - terraform validate
+     - terraform plan
 
-deploy:
-  stage: deploy
-  script:
-    - terraform apply -auto-approve=true
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}')
-    - cat $BASTION_IP
-    - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "git clone https://gitlab.com/itsmeoz/terraform-eks-cluster-deployment.git"
-    - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "cd terraform-eks-cluster-deployment && kubectl deploy -f simple-app.yaml"
-
+ deploy:
+   stage: deploy
+   script:
+     - terraform apply -auto-approve=true
+     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+     - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}')
+     - cat $BASTION_IP
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "git clone https://gitlab.com/itsmeoz/terraform-eks-cluster-deployment.git"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "cd terraform-eks-cluster-deployment && kubectl deploy -f simple-app.yaml"
 
  destroy:
-  stage: destroy
-  script:
-    - terraform destroy -force -auto-approve
-  when: manual
+   stage: destroy
+   script:
+     - terraform destroy -force -auto-approve
+   when: manual
