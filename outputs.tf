@@ -52,5 +52,5 @@ output "kubeconfig" {
 }
 
 output "bastion_eip" {
-  value = aws_eip.bastion_eip.id
+  value = aws_eip.bastion_eip.public_ip
 }
