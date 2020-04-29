@@ -31,7 +31,7 @@
    stage: deploy
    when: manual
    script:
-     - terraform apply -auto-approve=true -target=aws_instance.k8s_bastion_node
+     - terraform apply -auto-approve=true -target=aws_instance.k8s_bastion_node -target=aws_eip.bastion_eip -target=aws_internet_gateway.k8s -target=aws_vpc.k8s
      - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
      - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}')
      - cat $BASTION_IP
