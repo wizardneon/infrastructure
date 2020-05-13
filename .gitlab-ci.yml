@@ -10,6 +10,7 @@
  stages:
    - build
    - deploy
+   - bastion-prep
    - destroy
 
  before_script:
@@ -32,16 +33,19 @@
    when: manual
    script:
      - terraform apply -auto-approve=true
-     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
      - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}')
-     - sleep 40
+
+ bastion-prep:
+   stage: bastion-prep
+   when: manual
+   script:
+     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y update"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y install unzip"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip && unzip awscliv2.zip"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo ./aws/install"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "git clone https://gitlab.com/itsmeoz/terraform-eks-cluster-deployment.git"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "cd terraform-eks-cluster-deployment && kubectl deploy -f simple-app.yaml"
-
 
  destroy:
    stage: destroy
