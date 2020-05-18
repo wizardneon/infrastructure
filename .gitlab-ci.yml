@@ -34,6 +34,7 @@
    script:
      - terraform apply -auto-approve=true
      - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}') >> deploy.env
+     - cat $BASTION_IP
    artifacts:
      reports:
        dotenv: deploy.env
@@ -44,7 +45,7 @@
    when: manual
    script:
      - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-     - $BASTION_IP
+     - cat $BASTION_IP
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y update"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y install unzip"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip && unzip awscliv2.zip"
