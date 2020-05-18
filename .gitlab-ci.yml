@@ -46,7 +46,7 @@
      - sleep 300
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y update"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y install unzip"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip && unzip awscliv2.zip"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o awscliv2.zip && unzip awscliv2.zip"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo ./aws/install"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "git clone https://gitlab.com/itsmeoz/terraform-eks-cluster-deployment.git"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "cd terraform-eks-cluster-deployment && kubectl deploy -f simple-app.yaml"
