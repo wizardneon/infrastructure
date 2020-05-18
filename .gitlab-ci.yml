@@ -14,10 +14,6 @@
    - destroy
 
  before_script:
-   - mkdir -p ~/.ssh && chmod 700 ~/.ssh
-   - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-   - chmod 600 ~/.ssh/id_rsa
-   - eval $(ssh-agent -s)
    - rm -rf .terraform
    - terraform --version
    - terraform init
@@ -34,7 +30,7 @@
    script:
      - terraform apply -auto-approve=true
      - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}') >> deploy.env
-     - cat $BASTION_IP
+     - echo $BASTION_IP
    artifacts:
      reports:
        dotenv: deploy.env
@@ -44,8 +40,12 @@
    stage: bastion-prep
    when: manual
    script:
+     - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+     - chmod 600 ~/.ssh/id_rsa
+     - eval $(ssh-agent -s)
      - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-     - cat $BASTION_IP
+     - echo $BASTION_IP
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y update"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y install unzip"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip && unzip awscliv2.zip"
