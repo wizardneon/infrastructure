@@ -47,7 +47,7 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o awscliv2.zip && unzip awscliv2.zip"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo ./aws/install"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "aws --version"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.2/bin/linux/amd64/kubectl"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl"
      - terraform output kubeconfig > kubeconfig && terraform output config_map_aws_auth > config_map_aws_auth.yaml
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "mkdir -p ~/.kube"
