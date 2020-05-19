@@ -30,8 +30,6 @@
    script:
      - terraform apply -auto-approve=true
      - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}') >> deploy.env
-
-
 # this stage waiting Inherit environment variables development
 # https://gitlab.com/gitlab-org/gitlab/-/issues/22638#note_343416057
 # bastion-prep:
@@ -46,19 +44,22 @@
      - sleep 300
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y update"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y install unzip"
-#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o awscliv2.zip && unzip awscliv2.zip"
-#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo ./aws/install"
-#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "aws --version"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o awscliv2.zip && unzip awscliv2.zip"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo ./aws/install"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "aws --version"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl"
      - terraform output kubeconfig > kubeconfig && terraform output config_map_aws_auth > config_map_aws_auth.yaml
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "mkdir -p ~/.kube"
-     - scp kubeconfig ubuntu@$BASTION_IP:~/.kube/
+     - scp kubeconfig ubuntu@$BASTION_IP:~/.kube/config
      - scp config_map_aws_auth.yaml ubuntu@$BASTION_IP:~/
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f config_map_aws_auth.yaml"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl get svc"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm version --short"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace prometheus"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm install prometheus stable/prometheus --namespace prometheus --set alertmanager.persistentVolume.storageClass='gp2' --set server.persistentVolume.storageClass='gp2'"
+
 
    artifacts:
      reports:
