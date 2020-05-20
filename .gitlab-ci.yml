@@ -68,7 +68,8 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm repo add stable https://kubernetes-charts.storage.googleapis.com/"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace prometheus"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm install prometheus stable/prometheus --namespace prometheus --set alertmanager.persistentVolume.storageClass='gp2' --set server.persistentVolume.storageClass='gp2'"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl port-forward -n prometheus deploy/prometheus-server 8080:9090"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm install grafana stable/grafana --namespace grafana --set persistence.storageClassName='gp2' --set persistence.enabled=true --set adminPassword='EKS!sAWSome' --values grafana.yaml --set service.type=LoadBalancer"
 
 
    artifacts:
