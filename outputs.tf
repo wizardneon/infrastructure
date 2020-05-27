@@ -46,10 +46,12 @@ KUBECONFIG
 
 output "config_map_aws_auth" {
   value = local.config_map_aws_auth
+  sensitive   = true
 }
 
 output "kubeconfig" {
   value = local.kubeconfig
+  sensitive   = true
 }
 
 output "bastion_eip" {
