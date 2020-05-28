@@ -45,9 +45,14 @@ resource "aws_eks_cluster" "k8s" {
 }
 
 # OIDC
+### External cli kubergrunt
+data "external" "thumb" {
+  program = [ "get_thumbprint.sh", var.aws_region ]
+}
+
 resource "aws_iam_openid_connect_provider" "oidc" {
   client_id_list  = ["sts.amazonaws.com"]
-  thumbprint_list = []
+  thumbprint_list = [data.external.thumb.result.thumbprint]
   url             = "${aws_eks_cluster.k8s.identity.0.oidc.0.issuer}"
 }
 
@@ -61,6 +66,7 @@ data "aws_iam_policy_document" "oidc_assume_role_policy" {
     condition {
       test     = "StringEquals"
       variable = "${replace(aws_iam_openid_connect_provider.oidc.url, "https://", "")}:sub"
+#      values   = ["sts.amazonaws.com"]
       values   = ["system:serviceaccount:kube-system:aws-node"]
     }
 
