@@ -31,6 +31,7 @@ resource "aws_iam_role_policy_attachment" "k8s-cluster-AmazonEKSServicePolicy" {
 resource "aws_eks_cluster" "k8s" {
   name     = var.cluster-name
   role_arn = aws_iam_role.k8s-cluster.arn
+  enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
 
   vpc_config {
     security_group_ids = [aws_security_group.k8s-cluster.id]
@@ -42,6 +43,39 @@ resource "aws_eks_cluster" "k8s" {
     aws_iam_role_policy_attachment.k8s-cluster-AmazonEKSServicePolicy,
   ]
 }
+
+# OIDC
+resource "aws_iam_openid_connect_provider" "oidc" {
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = []
+  url             = "${aws_eks_cluster.k8s.identity.0.oidc.0.issuer}"
+}
+
+data "aws_caller_identity" "current" {}
+
+data "aws_iam_policy_document" "oidc_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.oidc.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:kube-system:aws-node"]
+    }
+
+    principals {
+      identifiers = ["${aws_iam_openid_connect_provider.oidc.arn}"]
+      type        = "Federated"
+    }
+  }
+}
+
+resource "aws_iam_role" "oidc" {
+  assume_role_policy = "${data.aws_iam_policy_document.oidc_assume_role_policy.json}"
+  name               = "oidc"
+}
+
 #worker_nodes
 
 resource "aws_iam_role" "k8s-worker-node" {
