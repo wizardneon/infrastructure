@@ -45,15 +45,15 @@ resource "aws_eks_cluster" "k8s" {
 }
 
 # OIDC
-### External cli kubergrunt
+
 data "external" "thumb" {
-  program = ["kubergrunt", "eks", "oidc-thumbprint", "--issuer-url", aws_eks_cluster.k8s.identity.0.oidc.0.issuer]
+  program = [ "get_thumbprint.sh", var.aws_region ]
 }
 
 resource "aws_iam_openid_connect_provider" "oidc" {
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [data.external.thumb.result.thumbprint]
-  url             = "${aws_eks_cluster.k8s.identity.0.oidc.0.issuer}"
+  url             = aws_eks_cluster.k8s.identity.0.oidc.0.issuer
 }
 
 data "aws_caller_identity" "current" {}
