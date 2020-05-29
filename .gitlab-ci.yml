@@ -17,7 +17,6 @@
    - rm -rf .terraform
    - terraform --version
    - terraform init
-   - ls -lah
 
  build:
    stage: build
@@ -37,38 +36,47 @@
 #   stage: bastion-prep
 #   when: manual
 #   script:
+# add private key to access bastion node
      - mkdir -p ~/.ssh && chmod 700 ~/.ssh
      - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
      - chmod 600 ~/.ssh/id_rsa
      - eval $(ssh-agent -s)
      - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+# wait for bastion node
      - sleep 200
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y update"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y install unzip"
+# install awscli
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o awscliv2.zip && unzip awscliv2.zip"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo ./aws/install"
+# configure awscli
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "aws configure set default.region $AWS_DEFAULT_REGION"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "aws --version"
+# you can use aws-iam-authenticator if you need to
 #     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.16.8/2020-04-16/bin/linux/amd64/aws-iam-authenticator"
 #     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "chmod +x ./aws-iam-authenticator"
 #     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "mkdir -p $HOME/bin && cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$PATH:$HOME/bin"
 #     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc"
 #     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "aws-iam-authenticator help"
+# install kubectl
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.2/bin/linux/amd64/kubectl"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl"
+# copy kubeconfig & config_map to bastion node
      - terraform output kubeconfig > kubeconfig && terraform output config_map_aws_auth > config_map_aws_auth.yaml
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "mkdir -p ~/.kube"
      - scp kubeconfig ubuntu@$BASTION_IP:~/.kube/config
      - scp config_map_aws_auth.yaml ubuntu@$BASTION_IP:~/
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f config_map_aws_auth.yaml"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl get svc"
+# install HELM
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm version --short"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm repo add stable https://kubernetes-charts.storage.googleapis.com/"
+# deploy Prometheus
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace prometheus"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm install prometheus stable/prometheus --namespace prometheus --set alertmanager.persistentVolume.storageClass='gp2' --set server.persistentVolume.storageClass='gp2'"
+# deploy graphana
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana"
      - scp grafana.yaml ubuntu@$BASTION_IP:~/
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm install grafana stable/grafana --namespace grafana --set persistence.storageClassName='gp2' --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values grafana.yaml --set service.type=LoadBalancer"
