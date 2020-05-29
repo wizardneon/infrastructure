@@ -46,7 +46,7 @@ resource "aws_eks_cluster" "k8s" {
 
 # OIDC
 data "external" "thumb" {
-  program = [ "get_thumbprint.sh", var.aws_region ]
+  program = [ "./get_thumbprint.sh", var.aws_region ]
 }
 
 resource "aws_iam_openid_connect_provider" "oidc" {
