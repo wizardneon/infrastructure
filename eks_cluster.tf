@@ -60,12 +60,9 @@ resource "aws_eks_node_group" "k8s" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.k8s-worker-node-AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.k8s-worker-node-AmazonEKS_CNI_Policy,
-    aws_iam_role_policy_attachment.k8s-worker-node-AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_openid_connect_provider.oidc,
   ]
 }
-
 
 resource "aws_iam_role" "k8s-worker-node" {
   name = "terraform-eks-k8s-worker-node"
@@ -77,9 +74,9 @@ resource "aws_iam_role" "k8s-worker-node" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Service": "ec2.amazonaws.com"
+        "Federated": "aws_iam_openid_connect_provider.oidc.arn"
       },
-      "Action": "sts:AssumeRole"
+      "Action": "sts:AssumeRoleWithWebIdentity"
     }
   ]
 }
@@ -94,6 +91,7 @@ resource "aws_iam_role_policy_attachment" "k8s-worker-node-AmazonEKSWorkerNodePo
 resource "aws_iam_role_policy_attachment" "k8s-worker-node-AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = aws_iam_role.k8s-worker-node.name
+  depends_on = [aws_iam_role.k8s-worker-node]
 }
 
 resource "aws_iam_role_policy_attachment" "k8s-worker-node-AmazonEC2ContainerRegistryReadOnly" {
@@ -165,7 +163,6 @@ data "aws_iam_policy_document" "oidc_assume_role_policy" {
       test     = "StringEquals"
       variable = "${replace(aws_iam_openid_connect_provider.oidc.url, "https://", "")}:sub"
       values   = ["sts.amazonaws.com"]
-#      values   = ["system:serviceaccount:kube-system:aws-node"]
     }
 
     principals {
