@@ -4,6 +4,8 @@ terraform {
     bucket = "tf-states-for-eks"
     key    = "states/terraform.tfstate"
     region = "eu-west-1"
+    access_key = "AKIA5FGUA55FMMJWX4PT"
+    secret_key = "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"
   }
 }
 
@@ -14,5 +16,7 @@ data "terraform_remote_state" "state" {
     bucket               = "tf-states-for-eks"
     key                  = "states/terraform.tfstate"
     region               = "eu-west-1"
+    access_key = "AKIA5FGUA55FMMJWX4PT"
+    secret_key = "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"
   }
 }
