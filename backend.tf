@@ -4,7 +4,7 @@ terraform {
     bucket = "tf-states-for-eks"
     key    = "states/terraform.tfstate"
     region = "eu-west-1"
-    profile
+    profile = "wizardneon"
   }
 }
 
@@ -15,5 +15,5 @@ data "terraform_remote_state" "state" {
     bucket               = "tf-states-for-eks"
     key                  = "states/terraform.tfstate"
     region               = "eu-west-1"
-
+    profile = "wizardneon"
 }
