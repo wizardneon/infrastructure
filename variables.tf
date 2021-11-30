@@ -9,7 +9,7 @@ variable "aws_region" {
 }
 
 variable "k8s_bastion_node_instance_type" {
-  default = "t2.nano"
+  default = "t2.micro"
   type    = string
 }
 
