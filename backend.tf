@@ -1,7 +1,7 @@
 # S3 bucket for terroform states
 terraform {
   backend "s3" {
-    bucket = "tf-states-for-eks"
+    bucket = "state-teraform"
     key    = "states/terraform.tfstate"
     region = "eu-west-1"
     profile = "wizardneon"
