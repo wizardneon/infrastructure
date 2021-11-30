@@ -4,10 +4,10 @@ data "aws_availability_zones" "available" {
 resource "aws_vpc" "k8s" {
   cidr_block = "10.0.0.0/16"
 
-  tags = map(
-    "Name", "terraform-eks-k8s-worker-node",
-    "kubernetes.io/cluster/${var.cluster-name}", "shared",
-  )
+  tags = tomap({
+    "Name" = "terraform-eks-k8s-worker-node"
+    "kubernetes.io/cluster/${var.cluster-name}" = "shared",
+  })
 }
 
 #subnets
@@ -18,10 +18,10 @@ resource "aws_subnet" "k8s" {
   cidr_block        = "10.0.${count.index}.0/24"
   vpc_id            = aws_vpc.k8s.id
   map_public_ip_on_launch = true
-  tags = map(
-    "Name", "terraform-eks-k8s-worker-node",
-    "kubernetes.io/cluster/${var.cluster-name}", "shared",
-  )
+  tags = tomap({
+    "Name" = "terraform-eks-k8s-worker-node"
+    "kubernetes.io/cluster/${var.cluster-name}" = "shared",
+  })
 }
 
 #gateway
