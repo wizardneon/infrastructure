@@ -19,7 +19,7 @@ variable "k8s_bastion_node_ami" {
 }
 
 variable "k8s_bastion_node_key_name" {
-  default = "francfurt"
+  default = "SSH_PRIVATE_KEY"
   type    = string
 }
 
