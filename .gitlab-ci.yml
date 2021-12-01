@@ -67,7 +67,9 @@
      - terraform output kubeconfig > kubeconfig && terraform output config_map_aws_auth > config_map_aws_auth.yaml
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "mkdir -p ~/.kube"
      - scp kubeconfig ubuntu@$BASTION_IP:~/.kube/config
+     - sed -i '1d;$d' ~/.kube/config
      - scp config_map_aws_auth.yaml ubuntu@$BASTION_IP:~/
+     - sed -i '1d;$d' ~/config_map_aws_auth.yaml
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f config_map_aws_auth.yaml"
 # install HELM
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash"
