@@ -38,8 +38,8 @@
 #   script:
 # add private key to access bastion node             id_rsa
      - mkdir -p ~/.ssh && chmod 700 ~/.ssh
-     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/francfurt
-     - chmod 600 ~/.ssh/francfurt
+     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/SSH_PRIVATE_KEY
+     - chmod 600 ~/.ssh/SSH_PRIVATE_KEY
      - eval $(ssh-agent -s)
      - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
 # wait for bastion node
