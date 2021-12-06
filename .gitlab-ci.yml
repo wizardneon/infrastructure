@@ -71,14 +71,11 @@
      - scp config_map_aws_auth.yaml ubuntu@$BASTION_IP:~/
 
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sed -i '1d;$d' ~/config_map_aws_auth.yaml"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sed -i '$d' ~/config_map_aws_auth.yaml"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sed -i '$d' ~/config_map_aws_auth.yaml"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sed -i '$d' ~/config_map_aws_auth.yaml"
-
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "grep -v 'EOT' ~/config_map_aws_auth.yaml > ~/1 && mv ~/1 ~/config_map_aws_auth.yaml"
+     
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sed -i '1d;$d' ~/.kube/config"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sed -i '$d' ~/.kube/config"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sed -i '$d' ~/.kube/config"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sed -i '$d' ~/.kube/config"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "grep -v 'EOT' ~/.kube/config >~/.kube/1 && mv 1 ~/.kube/config"
+
 
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f config_map_aws_auth.yaml"
 # install HELM
