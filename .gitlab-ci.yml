@@ -99,5 +99,5 @@
  destroy:
    stage: destroy
    script:
-     - terraform destroy -force -auto-approve
+     - terraform destroy -auto-approve
    when: manual
