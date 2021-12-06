@@ -70,9 +70,9 @@
      - scp kubeconfig ubuntu@$BASTION_IP:~/.kube/config
      - scp config_map_aws_auth.yaml ubuntu@$BASTION_IP:~/
 
-     - sed -i '1d;$d' ./.kube/config
-     - sed -i '1d;$d' config_map_aws_auth.yaml
-     
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sed -i '1d;$d' ~/config_map_aws_auth.yaml"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sed -i '1d;$d' ~/.kube/config"
+
     
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f config_map_aws_auth.yaml"
 # install HELM
