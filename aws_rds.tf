@@ -1,4 +1,4 @@
-resource "aws_db_instance" "wordpressdb" {
+resource "aws_db_instance" "diplomrds" {
   allocated_storage    = 10
   engine               = "mysql"
   engine_version       = "5.7"
