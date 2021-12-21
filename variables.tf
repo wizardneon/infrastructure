@@ -61,3 +61,13 @@ variable "deploy_spec" {
 variable "default_branch" {
   default = "master"
 }
+variable "database_name" {
+  
+}  
+variable "database_user" {
+ 
+}  
+variable "database_password" {
+ 
+}
+
