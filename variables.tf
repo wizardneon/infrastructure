@@ -37,3 +37,9 @@ variable "worker_nodes_min_size" {
   default = "1"
   type    = string
 }
+
+variable "repo_name" {
+  default = "tf-eks"
+  type    = string
+}
+
