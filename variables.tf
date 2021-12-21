@@ -44,13 +44,4 @@ variable "repo_name" {
 }
 
 
-variable "database_name" {
-  
-}  
-variable "database_user" {
- 
-}  
-variable "database_password" {
- 
-}
 
