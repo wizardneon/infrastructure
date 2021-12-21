@@ -20,7 +20,7 @@ resource "aws_codebuild_project" "tf-eks-deploy-staging" {
     }
     
     environment_variable {
-      "name"  = "ECR_REPO"
+      "name"  = ECR_REPO
       "value" = "${aws_ecr_repository.tf-eks-ecr.repository_url}"
     }
   }
