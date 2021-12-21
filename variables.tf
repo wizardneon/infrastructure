@@ -39,7 +39,7 @@ variable "worker_nodes_min_size" {
 }
 
 variable "repo_name" {
-  default = "tf-eks"
+  default = "ecr_for_images"
   type    = string
 }
 
