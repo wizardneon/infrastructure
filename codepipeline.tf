@@ -9,7 +9,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
 
 
   stage {
-    name = "StagingDeploy"
+    name = StagingDeploy
 
     action {
       name             = "StagingDeploy"
@@ -26,7 +26,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
   }
 
   stage {
-    name = "PromoteToProd"
+    name = PromoteToProd
 
     action {
       name             = "PromoteToProd"
@@ -38,7 +38,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
   }
 
   stage {
-    name = "ProdDeploy"
+    name = ProdDeploy
 
     action {
       name             = "ProdDeploy"
