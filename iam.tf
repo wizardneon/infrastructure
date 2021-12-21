@@ -84,7 +84,7 @@ resource "aws_iam_role_policy" "tf-eks-pipeline" {
             "kms:ReEncrypt*",
             "kms:Decrypt"
         ],
-        "Resource": "${aws_kms_key.artifact_encryption_key.arn}",
+        
         "Effect": "Allow"
     }
   ]
