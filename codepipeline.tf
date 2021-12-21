@@ -6,7 +6,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
   artifact_store = {
     location = "${aws_s3_bucket.build_artifact_bucket.bucket}"
     type     = "S3"
-
+  }
 
   stage = {
     name = StagingDeploy
