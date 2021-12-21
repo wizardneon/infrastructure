@@ -13,15 +13,15 @@ resource "aws_codebuild_project" "tf-eks-deploy-staging" {
     image           = "${var.deploy_image}"
     type            = "LINUX_CONTAINER"
     privileged_mode = false
-
+  
     environment_variable {
-      "name"  = EKS_NAMESPACE
-      "value" = "tf-eks-staging"
+      name  = "EKS_NAMESPACE"
+      value = "tf-eks-staging"
     }
     
     environment_variable {
-      "name"  = ECR_REPO
-      "value" = "${aws_ecr_repository.tf-eks-ecr.repository_url}"
+      name  = "ECR_REPO"
+      value = "${aws_ecr_repository.tf-eks-ecr.repository_url}"
     }
   }
 
@@ -49,12 +49,12 @@ resource "aws_codebuild_project" "tf-eks-deploy-prod" {
     privileged_mode = false
 
     environment_variable {
-      "name"  = "EKS_NAMESPACE"
-      "value" = "tf-eks-prod"
+      name  = "EKS_NAMESPACE"
+      value = "tf-eks-prod"
     }
     environment_variable {
-      "name"  = "ECR_REPO"
-      "value" = "${aws_ecr_repository.tf-eks-ecr.repository_url}"
+      name  = "ECR_REPO"
+      value = "${aws_ecr_repository.tf-eks-ecr.repository_url}"
     }
   }
 
