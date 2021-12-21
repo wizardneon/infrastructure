@@ -1,4 +1,3 @@
-
 locals {
   config_map_aws_auth = <<CONFIGMAPAWSAUTH
 apiVersion: v1
@@ -56,4 +55,11 @@ output "kubeconfig" {
 
 output "bastion_eip" {
   value = aws_eip.bastion_eip.public_ip
+}
+oputput "RDS_endpoint" {
+  value =aws_db_instance.diplomrds.endpoint
+}
+output "repository_url" {
+  description = "The URL of the repository."
+  value = aws_ecr_repository.ecr_for_images.repository_url
 }
