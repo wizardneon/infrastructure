@@ -8,7 +8,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
     type     = "S3"
 
 
-  stage {
+  stage = {
     name = StagingDeploy
 
     action {
@@ -25,7 +25,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
     }
   }
 
-  stage {
+  stage = {
     name = PromoteToProd
 
     action {
@@ -37,7 +37,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
     }
   }
 
-  stage {
+  stage = {
     name = ProdDeploy
 
     action {
