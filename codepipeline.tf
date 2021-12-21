@@ -19,7 +19,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
       input_artifacts  = ["source"]
       version          = "1"
 
-      configuration {
+      configuration = {
         ProjectName = "${aws_codebuild_project.tf-eks-deploy-staging.name}"
       }
     }
