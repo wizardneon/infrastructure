@@ -56,7 +56,7 @@ output "kubeconfig" {
 output "bastion_eip" {
   value = aws_eip.bastion_eip.public_ip
 }
-oputput "RDS_endpoint" {
+output "RDS_endpoint" {
   value =aws_db_instance.diplomrds.endpoint
 }
 output "repository_url" {
