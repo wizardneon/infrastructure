@@ -1,5 +1,5 @@
 variable "cluster-name" {
-  default = "A-Lovely-Kubernetes-Cluster"
+  default = "Diplom-Kubernetes-Cluster"
   type    = string
 }
 
