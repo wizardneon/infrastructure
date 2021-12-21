@@ -11,7 +11,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
   stage = {
     name = StagingDeploy
 
-    action {
+    action = {
       name             = "StagingDeploy"
       category         = "Build"
       owner            = "AWS"
@@ -28,7 +28,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
   stage = {
     name = PromoteToProd
 
-    action {
+    action = {
       name             = "PromoteToProd"
       category         = "Approval"
       owner            = "AWS"
@@ -40,7 +40,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
   stage = {
     name = ProdDeploy
 
-    action {
+    action = {
       name             = "ProdDeploy"
       category         = "Build"
       owner            = "AWS"
@@ -48,7 +48,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
       input_artifacts  = ["source"]
       version          = "1"
 
-      configuration {
+      configuration = {
         ProjectName = "${aws_codebuild_project.tf-eks-deploy-prod.name}"
       }
     }
