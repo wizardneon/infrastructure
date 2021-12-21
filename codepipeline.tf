@@ -19,7 +19,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
         ProjectName = "${aws_codebuild_project.tf-eks-deploy-staging.name}"
       }
     }
-  
+  }
 
   stage = {
     name = PromoteToProd
