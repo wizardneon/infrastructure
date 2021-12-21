@@ -42,4 +42,22 @@ variable "repo_name" {
   default = "ecr_for_images"
   type    = string
 }
-
+# define docker image for build stage
+variable "build_image" {
+  default = "aws/codebuild/docker:18.09.0"
+}
+variable "build_spec" {
+  default = "buildspec/build.yml"
+}
+# define docker image for deploy stage
+variable "deploy_image" {
+  default = "shawnxlw/ide"
+}
+# define build spec for deploy stage
+variable "deploy_spec" {
+  default = "buildspec/deploy.yml"
+}
+# define default git branch
+variable "default_branch" {
+  default = "master"
+}
