@@ -21,7 +21,7 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
     }
   
 
-
+  stage = {
     name = PromoteToProd
 
     action = {
@@ -31,9 +31,9 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
       provider         = "Manual"
       version          = "1"
     }
-  
+ }
 
-
+  stage = {
     name = ProdDeploy
 
     action = {
