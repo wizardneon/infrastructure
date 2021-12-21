@@ -3,10 +3,6 @@ resource "aws_codepipeline" "tf-eks-pipeline" {
   name     = "${var.repo_name}"
   role_arn = "${aws_iam_role.tf-eks-pipeline.arn}"
 
-  artifact_store = {
-    location = "${aws_s3_bucket.build_artifact_bucket.bucket}"
-    type     = "S3"
-  }
 
   stage = {
     name = StagingDeploy
