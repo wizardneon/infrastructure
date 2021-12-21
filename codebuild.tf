@@ -1,4 +1,3 @@
-
 # staging deploy
 resource "aws_codebuild_project" "tf-eks-deploy-staging" {
   name          = "tf-eks-deploy-staging"
@@ -16,7 +15,7 @@ resource "aws_codebuild_project" "tf-eks-deploy-staging" {
     privileged_mode = false
 
     environment_variable {
-      "name"  = "EKS_NAMESPACE"
+      "name"  = EKS_NAMESPACE
       "value" = "tf-eks-staging"
     }
     
