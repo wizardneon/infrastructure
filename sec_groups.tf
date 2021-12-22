@@ -34,7 +34,24 @@ resource "aws_security_group" "k8s-worker-node" {
     "kubernetes.io/cluster/${var.cluster-name}" = "owned"
   }
 }
+#Bastion sec_group
+resource "aws_security_group" "rds_sg" {
+  name        = "terraform-eks-rds-sg"
+  description = "Security group for rds instance"
+  vpc_id      = aws_vpc.k8s.id
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    "Name" = "terraform-eks-rds-sg"
+    "kubernetes.io/cluster/${var.cluster-name}" = "owned"
+  }
+}
 #Bastion sec_group
 resource "aws_security_group" "k8s-bastion-node" {
   name        = "terraform-eks-k8s-bastion-node"
@@ -75,6 +92,16 @@ resource "aws_security_group_rule" "k8s-worker-node-ingress-cluster" {
   type                     = "ingress"
  }
 
+ resource "aws_security_group_rule" "k8s-rds-rule" {
+  description              = "rds receive communication from the cluster control plane"
+  from_port                = 5432
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.k8s-worker-node.id
+  source_security_group_id = aws_security_group.k8s-cluster.id
+  to_port                  = 5432
+  type                     = "ingress"
+ }
+
  resource "aws_security_group_rule" "k8s-cluster-ingress-node-https" {
   description              = "Allow pods to communicate with the cluster API Server"
   from_port                = 443
@@ -104,3 +131,5 @@ resource "aws_security_group_rule" "k8s-cluster-ingress-bastion-ssh" {
   to_port                  = 22
   type                     = "ingress"
 }
+
+
