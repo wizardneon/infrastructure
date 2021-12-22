@@ -38,8 +38,7 @@ resource "aws_security_group" "k8s-worker-node" {
 resource "aws_security_group" "rds_sg" {
   name        = "terraform-eks-rds-sg"
   description = "Security group for rds instance"
-  vpc_id      = aws_vpc.k8s.id
-
+  
   egress {
     from_port   = 0
     to_port     = 0
@@ -97,7 +96,7 @@ resource "aws_security_group_rule" "k8s-worker-node-ingress-cluster" {
   from_port                = 5432
   protocol                 = "tcp"
   security_group_id        = aws_security_group.rds_sg.id
-  source_security_group_id = aws_security_group.k8s-bastion-node.id
+  source_security_group_id = aws_security_group.k8s-worker-node.id
   to_port                  = 5432
   type                     = "ingress"
  }
