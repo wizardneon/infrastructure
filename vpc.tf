@@ -11,7 +11,7 @@ resource "aws_vpc" "k8s" {
 }
 
 #subnets
-resource "aws_subnet" "k8s" {
+resource "aws_subnet" "k8s[count.index]" {
   count = 2
 
   availability_zone = data.aws_availability_zones.available.names[count.index]
