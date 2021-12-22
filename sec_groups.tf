@@ -34,7 +34,7 @@ resource "aws_security_group" "k8s-worker-node" {
     "kubernetes.io/cluster/${var.cluster-name}" = "owned"
   }
 }
-#Bastion sec_group
+#RDS sec_group
 resource "aws_security_group" "rds_sg" {
   name        = "terraform-eks-rds-sg"
   description = "Security group for rds instance"
