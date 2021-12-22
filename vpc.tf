@@ -26,7 +26,7 @@ resource "aws_subnet" "k8s" {
 resource "aws_subnet" "rds" {
   
   availability_zone = data.aws_availability_zones.available.names[1]
-  cidr_block        = "10.0.${count.index}.0/24"
+  cidr_block        = "10.0.4.0/24"
   vpc_id            = aws_vpc.k8s.id
   map_public_ip_on_launch = true
   tags = tomap({
