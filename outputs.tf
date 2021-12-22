@@ -57,7 +57,7 @@ output "bastion_eip" {
   value = aws_eip.bastion_eip.public_ip
 }
 output "RDS_endpoint" {
-  value =aws_db_instance.diplomrds.endpoint
+  value =aws_db_instance.postgres.endpoint
 }
 output "repository_url" {
   description = "The URL of the repository."
