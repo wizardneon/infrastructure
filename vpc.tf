@@ -23,7 +23,7 @@ resource "aws_subnet" "k8s" {
     "kubernetes.io/cluster/${var.cluster-name}" = "shared",
   })
 }
-resource "aws_db_subnet_group" "db-subnet" {
+resource "aws_db_subnet_group" "db_subnet" {
 count = 1
 name = "DB subnet group"
 subnet_ids = ["${aws_subnet.k8s[count.index].id}", "${aws_subnet.k8s[count.index].id}"]
