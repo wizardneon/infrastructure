@@ -25,7 +25,7 @@ resource "aws_subnet" "k8s" {
 }
 
 resource "aws_subnet" "rds" {
-  count = 2
+  count = 3
 
   availability_zone = data.aws_availability_zones.available.names[count.index]
   cidr_block        = "10.0.${count.index}.0/24"
