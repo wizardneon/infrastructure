@@ -11,7 +11,7 @@ resource "aws_vpc" "k8s" {
 }
 
 #subnets
-resource "aws_subnet" "k8s[count.index]" {
+resource "aws_subnet" "k8s" {
   count = 2
 
   availability_zone = data.aws_availability_zones.available.names[count.index]
@@ -23,10 +23,24 @@ resource "aws_subnet" "k8s[count.index]" {
     "kubernetes.io/cluster/${var.cluster-name}" = "shared",
   })
 }
+resource "aws_subnet" "rds" {
+  
+  availability_zone = data.aws_availability_zones.available.names[1]
+  cidr_block        = "10.0.${count.index}.0/24"
+  vpc_id            = aws_vpc.k8s.id
+  map_public_ip_on_launch = true
+  tags = tomap({
+    "Name" = "terraform-eks-k8s-worker-node"
+    "kubernetes.io/cluster/${var.cluster-name}" = "shared",
+  })
+}
+
+
+
 resource "aws_db_subnet_group" "db_subnet" {
-count = 2
+
 name = "db_subnet"
-subnet_ids = ["${aws_subnet.k8s[0].id}", "${aws_subnet.k8s[1].id}"]
+subnet_ids = ["${aws_subnet.k8s.id}", "${aws_subnet.rds.id}"]
 }
 
 #gateway
