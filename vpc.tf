@@ -24,7 +24,7 @@ resource "aws_subnet" "k8s" {
   })
 }
 resource "aws_db_subnet_group" "db_subnet" {
-count = 2
+count = 1
 name = "db_subnet"
 subnet_ids = ["${aws_subnet.k8s[count.index].id}", "${aws_subnet.k8s[count.index].id}"]
 }
