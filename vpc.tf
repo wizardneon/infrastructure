@@ -24,6 +24,22 @@ resource "aws_subnet" "k8s" {
   })
 }
 
+resource "aws_subnet" "rds" {
+  count = 2
+
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  cidr_block        = "10.0.${count.index}.0/24"
+  vpc_id            = aws_vpc.k8s.id
+  map_public_ip_on_launch = true
+  tags = tomap({
+    "Name" = "terraform-rds"
+  })
+}
+
+resource "aws_db_subnet_group" "db-subnet" {
+name = "DB subnet group"
+subnet_ids = ["${aws_subnet.rds.id}", "${aws_subnet.k8s.id}"]}
+
 #gateway
 resource "aws_internet_gateway" "k8s" {
   vpc_id = aws_vpc.k8s.id
