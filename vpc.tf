@@ -40,7 +40,7 @@ resource "aws_subnet" "rds" {
 resource "aws_db_subnet_group" "db_subnet" {
 
 name = "db_subnet"
-subnet_ids = ["${aws_subnet.k8s.id}", "${aws_subnet.rds.id}"]
+subnet_ids = ["${aws_subnet.k8s[0].id}", "${aws_subnet.rds.id}"]
 }
 
 #gateway
