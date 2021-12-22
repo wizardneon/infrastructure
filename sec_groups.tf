@@ -96,7 +96,7 @@ resource "aws_security_group_rule" "k8s-worker-node-ingress-cluster" {
   description              = "rds receive communication from the cluster control plane"
   from_port                = 5432
   protocol                 = "tcp"
-  security_group_id        = aws_security_group.k8s-worker-node.id
+  security_group_id        = ["${aws_security_group.k8s-worker-node.id}"] 
   source_security_group_id = aws_security_group.k8s-cluster.id
   to_port                  = 5432
   type                     = "ingress"
