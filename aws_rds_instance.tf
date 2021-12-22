@@ -8,3 +8,4 @@ resource "aws_db_instance" "postgres" {
   username             = var.DATABASE_USER
   password             = var.DATABASE_PASSWORD
   skip_final_snapshot  = true
+}
