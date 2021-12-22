@@ -5,6 +5,6 @@ resource "aws_db_instance" "diplomrds" {
   instance_class       = "db.t2.micro"
   vpc_security_group_ids      =["${aws_security_group.rds_sg.id}"]
   name                 = "${database_name}"
-  username             = "${database_user]"
+  username             = "${database_user}"
   password             = "${database_password}"
 }
