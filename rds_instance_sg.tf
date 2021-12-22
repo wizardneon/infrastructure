@@ -4,7 +4,7 @@ resource "aws_security_group" "rds_sg" {
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
-    security_groups = ["${aws_security_group.k8s-worker-node.id}"]
+    security_groups = ["${aws_security_group.k8s-cluster.id}"]
   }
   egress {
     from_port   = 0
