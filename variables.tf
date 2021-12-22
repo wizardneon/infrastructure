@@ -43,5 +43,17 @@ variable "repo_name" {
   type    = string
 }
 
+variable "DATABASE_NAME" {
+  type    = string
+}
+
+variable "DATABASE_USER" {
+  type    = string
+}
+
+variable "DATABASE_PASSWORD" {
+  type    = string
+}
+
 
 
