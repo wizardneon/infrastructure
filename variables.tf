@@ -58,5 +58,8 @@ variable "DATABASE_PASSWORD" {
   type    = string
 }
 
-
+variable "profile" {
+  default = "wizardneon"
+  type    = string
+}
 
