@@ -3,9 +3,8 @@ terraform {
   backend "s3" {
     bucket = "state-teraform"
     key    = "states/terraform.tfstate"
-    region = "eu-west-1"
-    profile = "wizardneon"
-  }
+    region = var.aws_region
+    profile = var.profile
 }
 
 # Retrieve state data from S3
