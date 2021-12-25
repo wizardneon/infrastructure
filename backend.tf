@@ -3,7 +3,7 @@ terraform {
   backend "s3" {
     bucket = "state-teraform"
     key    = "states/terraform.tfstate"
-    region = "${var.aws_region}"
+    region = ${AWS_DEFAULT_REGION}
     profile = "var.profile"
  }
 }
