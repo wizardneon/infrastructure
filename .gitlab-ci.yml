@@ -102,10 +102,10 @@
    script:
      - terraform output>output.json
      - cat output.json
-     - terraform output kubeconfig > kubeconfig
-     - sed -i '1d;$d' kubeconfig > kub
+     - terraform output kubeconfig > kubeconfig.yml
+     - sed -i '1d;$d' kubeconfig.yml> kub.yml
      
-     - cat kub
+     - cat kub.yml
     
 
 
