@@ -11,8 +11,8 @@
    - build
    - deploy
    - bastion-prep
-   - destroy
    - output
+   - destroy
 
  before_script:
    - rm -rf .terraform
