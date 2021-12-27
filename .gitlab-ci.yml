@@ -104,7 +104,7 @@
      - cat output.json
      - terraform output kubeconfig > kubeconfig
      - sed -i '1d;$d' kubeconfig > kub
-     - grep -v 'EOT' >kub
+     
      - cat kub
     
 
