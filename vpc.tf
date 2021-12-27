@@ -22,25 +22,12 @@ resource "aws_subnet" "k8s" {
     "Name" = "terraform-eks-k8s-worker-node"
     "kubernetes.io/cluster/${var.cluster-name}" = "shared",
   })
-}
-resource "aws_subnet" "rds" {
-  
-  availability_zone = data.aws_availability_zones.available.names[2]
-  cidr_block        = "10.0.4.0/24"
-  vpc_id            = aws_vpc.k8s.id
-  map_public_ip_on_launch = true
-  tags = tomap({
-    "Name" = "terraform-eks-k8s-worker-node"
-    "kubernetes.io/cluster/${var.cluster-name}" = "shared",
-  })
-}
-
 
 
 resource "aws_db_subnet_group" "db_subnet" {
 
 name = "db_subnet"
-subnet_ids = ["${aws_subnet.k8s[0].id}", "${aws_subnet.rds.id}", "${aws_subnet.k8s[1].id}"]
+subnet_ids = ["${aws_subnet.k8s[0].id}", "${aws_subnet.k8s[1].id}"]
 }
 
 #gateway
