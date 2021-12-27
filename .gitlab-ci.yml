@@ -103,7 +103,7 @@
      - terraform output>output.json
      - cat output.json
      - terraform output kubeconfig > kubeconfig
-     - cat kubeconfig 
+     - cat kubeconfig | sed -i '1d;$d' | grep -v 'EOT' 
 
 
  destroy:
