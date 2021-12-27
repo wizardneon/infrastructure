@@ -102,9 +102,9 @@
    script:
      - terraform output>output.json
      - cat output.json
+     - terraform output kubeconfig > kubeconfig
      - cat kubeconfig 
-     - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}') >> deploy.env
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "cat ~/.kube/config"
+
 
  destroy:
    stage: destroy
