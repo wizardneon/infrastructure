@@ -97,12 +97,12 @@
        dotenv: deploy.env
 
  output:
-   stage: build
    when: manual
    script:
      - terraform output>output.json
+     - cat output.json
      - scp output.json ubuntu@$BASTION_IP:~/
-
+     - cat kubeconfig 
   
  destroy:
    stage: destroy
