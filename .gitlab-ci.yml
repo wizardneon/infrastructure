@@ -97,6 +97,7 @@
        dotenv: deploy.env
 
  output:
+   stage: output
    when: manual
    script:
      - terraform output>output.json
