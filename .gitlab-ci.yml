@@ -104,9 +104,8 @@
      - cat output.json
      - terraform output kubeconfig > kubeconfig.yml
      - sed -i '1d;$d' kubeconfig.yml> kub.yml
-     
+     - cat kub | base 64
      - cat kub.yml
-    
 
 
  destroy:
