@@ -90,7 +90,7 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana"
      - scp grafana.yaml ubuntu@$BASTION_IP:~/
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm install grafana stable/grafana --namespace grafana --set persistence.storageClassName='gp2' --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values grafana.yaml --set service.type=LoadBalancer"
-
+     - scp output.json ubuntu@$BASTION_IP:~/
 
    artifacts:
      reports:
@@ -102,9 +102,10 @@
    script:
      - terraform output>output.json
      - cat output.json
-     - scp output.json ubuntu@$BASTION_IP:~/
      - cat kubeconfig 
-  
+     - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}')
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "cat ~/.kube/config"
+
  destroy:
    stage: destroy
    script:
