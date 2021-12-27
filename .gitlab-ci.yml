@@ -91,6 +91,7 @@
      - scp grafana.yaml ubuntu@$BASTION_IP:~/
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm install grafana stable/grafana --namespace grafana --set persistence.storageClassName='gp2' --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values grafana.yaml --set service.type=LoadBalancer"
      - scp output.json ubuntu@$BASTION_IP:~/
+     - cat kubeconfig ubuntu@$BASTION_IP:~/.kube/config | base64
 
    artifacts:
      reports:
@@ -105,7 +106,7 @@
      - terraform output kubeconfig > kubeconfig.yml
      - sed -i '1d;$d' kubeconfig.yml> kub.yml
      - cat kub.yml | base64
-     - cat kub.yml
+    
 
 
  destroy:
