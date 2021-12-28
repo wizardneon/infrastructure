@@ -106,7 +106,7 @@
      - terraform output kubeconfig > kubeconfig.yml
      - sed -i '1d;$d' kubeconfig.yml> kub.yml
      - cat kub.yml | base64
-    
+     - cat kub.yml 
 
 
  destroy:
