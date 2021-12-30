@@ -44,7 +44,7 @@ resource "aws_security_group" "rds_sg" {
     from_port = 5432
     to_port   = 5432
     protocol  = "tcp"
-    security_groups = ["${aws_security_group.k8s-worker-node.id}"]
+    security_groups = ["${aws_security_group.k8s-worker-node.id}", "${aws_security_group.k8s-bastion-node.id}"]
   }
   
   egress {
@@ -99,15 +99,6 @@ resource "aws_security_group_rule" "k8s-worker-node-ingress-cluster" {
   type                     = "ingress"
  }
 
- resource "aws_security_group_rule" "k8s-rds-rule" {
-  description              = "rds receive communication from the cluster control plane"
-  from_port                = 5432
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.rds_sg.id
-  source_security_group_id = aws_security_group.k8s-bastion-node.id
-  to_port                  = 5432
-  type                     = "ingress"
- }
 
  resource "aws_security_group_rule" "k8s-cluster-ingress-node-https" {
   description              = "Allow pods to communicate with the cluster API Server"
