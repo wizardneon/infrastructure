@@ -40,13 +40,6 @@ resource "aws_security_group" "rds_sg" {
   description = "Security group for rds instance"
   vpc_id      = aws_vpc.k8s.id
 
-  ingress {
-    from_port = 5432
-    to_port   = 5432
-    protocol  = "tcp"
-    security_groups = ["${aws_security_group.k8s-worker-node.id}", "${aws_security_group.k8s-bastion-node.id}"]
-  }
-  
   egress {
     from_port   = 0
     to_port     = 0
@@ -86,6 +79,16 @@ resource "aws_security_group_rule" "k8s-worker-node-ingress-self" {
   security_group_id        = aws_security_group.k8s-worker-node.id
   source_security_group_id = aws_security_group.k8s-worker-node.id
   to_port                  = 65535
+  type                     = "ingress"
+}
+
+resource "aws_security_group_rule" "k8s-rds_sg-ingress-self" {
+  description              = "Allow node to communicate with each other"
+  from_port                = 5432
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.rds_sg.id
+  source_security_group_id = aws_security_group.k8s-worker-node.id
+  to_port                  = 5432
   type                     = "ingress"
 }
 
