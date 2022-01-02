@@ -38,7 +38,7 @@ resource "aws_security_group" "k8s-worker-node" {
 resource "aws_security_group" "rds_sg" {
   name        = "terraform-eks-rds-sg"
   description = "Security group for rds instance"
-  vpc_id      = aws_vpc.k8s.id
+  vpc_id      = aws_vpc.rds.id
 
   egress {
     from_port   = 0
