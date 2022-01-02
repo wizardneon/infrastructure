@@ -63,6 +63,8 @@ resource "aws_eks_node_group" "k8s" {
     aws_iam_role_policy_attachment.k8s-worker-node-AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.k8s-worker-node-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.k8s-worker-node-AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.k8s-worker-node-AmazonEC2ContainerRegistryPowerUser,
+    aws_iam_role_policy_attachment.k8s-worker-node-AmazonRDSFullAccess  
   ]
 }
 
