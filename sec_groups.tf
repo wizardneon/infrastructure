@@ -84,10 +84,10 @@ resource "aws_security_group_rule" "k8s-worker-node-ingress-self" {
 
 resource "aws_security_group_rule" "k8s-rds_sg-ingress-self" {
   description              = "Allow node to communicate with each other"
+  cidr_blocks              = ["0.0.0.0/0"]
   from_port                = 5432
   protocol                 = "tcp"
   security_group_id        = aws_security_group.rds_sg.id
-  source_security_group_id = aws_security_group.k8s-worker-node.id
   to_port                  = 5432
   type                     = "ingress"
 }
@@ -102,13 +102,13 @@ resource "aws_security_group_rule" "k8s-worker-node-ingress-cluster" {
   type                     = "ingress"
  }
 
-resource "aws_security_group_rule" "k8s-worker-node-ingress-cluster2" {
+resource "aws_security_group_rule" "k8s-worker-node-ingress-db" {
   description              = "Allow worker Kubelets and pods to receive communication from the cluster control plane"
-  from_port                = 0
+  cidr_blocks              = ["0.0.0.0/0"]
+  from_port                = 5432
   protocol                 = "tcp"
   security_group_id        = aws_security_group.k8s-worker-node.id
-  source_security_group_id = aws_security_group.rds_sg.id
-  to_port                  = 65535
+  to_port                  = 5432
   type                     = "ingress"
  }
 
