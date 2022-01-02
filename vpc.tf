@@ -10,6 +10,16 @@ resource "aws_vpc" "k8s" {
   })
 }
 
+resource "aws_vpc" "rds" {
+  cidr_block = "10.0.0.0/16"
+
+  tags = tomap({
+    "Name" = "terraform-eks-k8s-rds"
+    "kubernetes.io/cluster/${var.cluster-name}" = "shared",
+  })
+}
+
+
 #subnets
 resource "aws_subnet" "k8s" {
   count = 2
