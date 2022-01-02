@@ -25,11 +25,11 @@ resource "aws_subnet" "k8s" {
 }
 
 
-resource "aws_db_subnet_group" "db_subnet" {
+#resource "aws_db_subnet_group" "db_subnet" {
 
-name = "db_subnet"
-subnet_ids = ["${aws_subnet.k8s[0].id}", "${aws_subnet.k8s[1].id}"]
-}
+#name = "db_subnet"
+#subnet_ids = ["${aws_subnet.k8s[0].id}", "${aws_subnet.k8s[1].id}"]
+#}
 
 #gateway
 resource "aws_internet_gateway" "k8s" {
