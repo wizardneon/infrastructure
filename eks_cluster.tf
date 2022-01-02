@@ -104,6 +104,10 @@ resource "aws_iam_role_policy_attachment" "k8s-worker-node-AmazonEC2ContainerReg
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
   role       = aws_iam_role.k8s-worker-node.name
 }
+resource "aws_iam_role_policy_attachment" "k8s-worker-node-AmazonRDSFullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
+  role       = aws_iam_role.k8s-worker-node.name
+}
 
 #k8s_bastion_node
 resource "aws_instance" "k8s_bastion_node" {
