@@ -105,21 +105,21 @@ resource "aws_security_group_rule" "k8s-worker-node-ingress-cluster" {
 
  resource "aws_security_group_rule" "k8s-cluster-ingress-node-https" {
   description              = "Allow pods to communicate with the cluster API Server"
-  from_port                = 443
+  from_port                = 80
   protocol                 = "tcp"
   security_group_id        = aws_security_group.k8s-cluster.id
   source_security_group_id = aws_security_group.k8s-worker-node.id
-  to_port                  = 443
+  to_port                  = 80
   type                     = "ingress"
 }
 
 resource "aws_security_group_rule" "k8s-cluster-ingress-bastion-https" {
   description              = "Allow The Bastion node to communicate with the cluster API Server"
-  from_port                = 443
+  from_port                = 80
   protocol                 = "tcp"
   security_group_id        = aws_security_group.k8s-cluster.id
   source_security_group_id = aws_security_group.k8s-bastion-node.id
-  to_port                  = 443
+  to_port                  = 80
   type                     = "ingress"
 }
 
