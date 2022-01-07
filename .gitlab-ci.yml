@@ -10,8 +10,6 @@
  stages:
    - build
    - deploy
-   - bastion-prep
-   - output
    - destroy
 
  before_script:
