@@ -88,6 +88,7 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana"
      - scp grafana.yaml ubuntu@$BASTION_IP:~/
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm install grafana stable/grafana --namespace grafana --set persistence.storageClassName='gp2' --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values grafana.yaml --set service.type=LoadBalancer"
+#output    
      - terraform output > output.json
      - scp output.json ubuntu@$BASTION_IP:~/output.json
      - terraform output kubeconfig 
