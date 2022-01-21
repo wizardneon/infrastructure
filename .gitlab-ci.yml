@@ -88,7 +88,11 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana"
      - scp grafana.yaml ubuntu@$BASTION_IP:~/
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm install grafana stable/grafana --namespace grafana --set persistence.storageClassName='gp2' --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values grafana.yaml --set service.type=LoadBalancer"
-
+# create namespace for app
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace dev"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace prod"
+#deploy Loki
+#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install loki --namespace=loki grafana/loki"
 #prometheus+grafana+promtail+loki
 #     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana"
 #     - scp grafana.yaml ubuntu@$BASTION_IP:~/
