@@ -92,11 +92,12 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace dev"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace prod"
 #deploy Loki
-#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install loki --namespace=loki grafana/loki"
+#    - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace loki"
+#    - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install loki --namespace=loki grafana/loki"
 #prometheus+grafana+promtail+loki
-#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana"
-#     - scp grafana.yaml ubuntu@$BASTION_IP:~/
-#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install loki grafana/loki-stack  --set grafana.enabled=true,prometheus.enabled=true,prometheus.alertmanager.persistentVolume.enabled=false,prometheus.server.persistentVolume.enabled=false"
+#    - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana"
+#    - scp grafana.yaml ubuntu@$BASTION_IP:~/
+#    - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install loki grafana/loki-stack  --set grafana.enabled=true,prometheus.enabled=true,prometheus.alertmanager.persistentVolume.enabled=false,prometheus.server.persistentVolume.enabled=false"
 
 #output    
      - terraform output > output.json
