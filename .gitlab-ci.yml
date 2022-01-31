@@ -109,8 +109,15 @@
      reports:
        dotenv: deploy.env
 
+ destroy_grafana:
+   stage: destroy
+   script:
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm delete grafana --namespace grafana"
+
+   when: manual
+
  destroy:
    stage: destroy
    script:
      - terraform destroy -auto-approve
-   when: manual
+   when: manual   
