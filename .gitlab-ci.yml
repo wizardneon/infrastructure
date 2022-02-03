@@ -33,7 +33,6 @@
      - terraform apply -auto-approve=true
 #create variables BASTION_IP    
      - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}') >> deploy.env
-     - echo "$BASTION_IP" 
 #output    
      - terraform output kubeconfig 
      - terraform output     
@@ -100,6 +99,12 @@
    stage: deploy_app
    when: manual
    script:
+      - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}') 
+      - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+      - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      - eval $(ssh-agent -s)
+      - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace monitoring"
 # deploy Prometheus
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm install prometheus stable/prometheus --namespace monitoring --set alertmanager.persistentVolume.storageClass='gp2' --set server.persistentVolume.storageClass='gp2'"
@@ -118,6 +123,7 @@
    stage: destroy_app
    when: manual
    script:
+     - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}')  
      - mkdir -p ~/.ssh && chmod 700 ~/.ssh
      - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
      - chmod 600 ~/.ssh/id_rsa
