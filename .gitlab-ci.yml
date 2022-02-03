@@ -110,7 +110,7 @@
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install prometheus stable/prometheus --namespace monitoring --set alertmanager.persistentVolume.storageClass='gp2' --set server.persistentVolume.storageClass='gp2'"
 #deploy graphana
       - scp grafana.yaml ubuntu@$BASTION_IP:~/
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install grafana stable/grafana --namespace monitoring --set persistence.storageClassName='gp2' --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values grafana.yaml 
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install grafana stable/grafana --namespace monitoring --set persistence.storageClassName='gp2' --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values grafana.yaml"
 #deploy Loki
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install loki grafana/loki --namespace=monitoring "
 #deploy Promteil
