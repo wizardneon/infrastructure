@@ -105,7 +105,7 @@
       - chmod 600 ~/.ssh/id_rsa
       - eval $(ssh-agent -s)
       - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace <add-namespace-here> --dry-run=client -o yaml | kubectl apply -f -"
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -"
 # deploy Prometheus
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm install prometheus stable/prometheus --namespace monitoring --set alertmanager.persistentVolume.storageClass='gp2' --set server.persistentVolume.storageClass='gp2'"
 #deploy graphana
