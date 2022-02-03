@@ -33,6 +33,7 @@
      - terraform apply -auto-approve=true
 #create variables BASTION_IP    
      - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}') >> deploy.env
+     - echo "BASTION_IP" 
 #output    
      - terraform output kubeconfig 
      - terraform output     
@@ -47,13 +48,14 @@
    when: manual
    script:
 # add private key to access bastion node             id_rsa
+     - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}') >> deploy.env
      - mkdir -p ~/.ssh && chmod 700 ~/.ssh
      - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
      - chmod 600 ~/.ssh/id_rsa
      - eval $(ssh-agent -s)
      - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
 # wait for bastion node
-     - sleep 200
+#    - sleep 200
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y update"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo DEBIAN_FRONTEND=noninteractive apt -y install unzip"
 # install awscli
