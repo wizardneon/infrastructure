@@ -33,7 +33,7 @@
      - terraform apply -auto-approve=true
 #create variables BASTION_IP    
      - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}') >> deploy.env
-     - echo "BASTION_IP" 
+     - echo "$BASTION_IP" 
 #output    
      - terraform output kubeconfig 
      - terraform output     
