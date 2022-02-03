@@ -87,7 +87,7 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm version --short"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm repo add stable https://charts.helm.sh/stable"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm repo add stable grafana https://grafana.github.io/helm-charts"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm repo add grafana https://grafana.github.io/helm-charts"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm repo update"     
 # create namespace for app
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace dev"
