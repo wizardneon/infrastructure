@@ -115,9 +115,11 @@
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install loki grafana/loki --namespace=monitoring --set loki.serviceName=loki "
 #deploy Promteil
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install promtail grafana/promtail --namespace=monitoring --set loki.serviceName=loki"  
-#deploy ingress
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-0.32.0/deploy/static/provider/aws/deploy.yaml"
+#deploy ingress old
+#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-0.32.0/deploy/static/provider/aws/deploy.yaml"
 
+#deploy ingress nginx new
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f https://github.com/kubernetes/ingress-nginx/blob/main/deploy/static/provider/aws/nlb-with-tls-termination/deploy.yaml
       - scp ./ingress_grafana.yaml ubuntu@$BASTION_IP:~/
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f ./ingress_grafana.yaml -n monitoring"
 
@@ -135,7 +137,9 @@
      - eval $(ssh-agent -s)
      - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm delete grafana loki promtail prometheus --namespace monitoring"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-0.32.0/deploy/static/provider/aws/deploy.yaml"
+#    - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-0.32.0/deploy/static/provider/aws/deploy.yaml"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete -f https://github.com/kubernetes/ingress-nginx/blob/main/deploy/static/provider/aws/nlb-with-tls-termination/deploy.yaml
+   
    dependencies:
      - deploy 
 
