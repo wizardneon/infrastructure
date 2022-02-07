@@ -121,7 +121,7 @@
 #deploy ingress nginx new
 #      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/aws/deploy.yaml"
       - scp ./ingress_grafana.yaml ubuntu@$BASTION_IP:~/
-#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f ./ingress_grafana.yaml -n monitoring"
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f ./ingress_grafana.yaml -n monitoring"
 
    dependencies:
      - deploy
