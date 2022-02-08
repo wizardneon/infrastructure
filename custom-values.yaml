@@ -19,7 +19,7 @@ grafana:
 grafana.ini:
     server:
       domain: wizardneon.link
-      root_url: %(protocol)s://%(domain)s:%(http_port)s/grafana/
+      root_url: http://localhost:80/grafana
 
 
 ingress:
