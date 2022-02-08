@@ -16,14 +16,11 @@ grafana:
   # set pspUseAppArmor to false to fix Grafana pod Init errors
   rbac:
     pspUseAppArmor: false
-  grafana.ini:
+grafana.ini:
     server:
       domain: wizardneon.link
       root_url: %(protocol)s://%(domain)s:%(http_port)s/grafana/
 
-  
-
-  
 
 ingress:
   enabled: true
