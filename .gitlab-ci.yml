@@ -90,7 +90,7 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm repo update"  
 # install k9s
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "wget -qO-  https://github.com/derailed/k9s/releases/download/v0.25.18/k9s_Linux_x86_64.tar.gz | tar zxvf -  -C /tmp/"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "mv /tmp/k9s /usr/local/bin"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sudo mv /tmp/k9s /usr/local/bin"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "export TERM=xterm-256color"
 # create namespace for app
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace dev"
