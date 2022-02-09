@@ -111,10 +111,10 @@
       - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana --dry-run=client -o yaml | kubectl apply -f -"
 # deploy Prometheus
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install prometheus stable/prometheus --namespace grafana"#--set alertmanager.persistentVolume.storageClass='gp2' # --set server.persistentVolume.storageClass='gp2'"
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install prometheus stable/prometheus --namespace grafana --set alertmanager.persistentVolume.storageClass='gp2' --set server.persistentVolume.storageClass='gp2'"
 #deploy graphana
       - scp custom-values.yaml ubuntu@$BASTION_IP:~/
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install grafana stable/grafana --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values custom-values.yaml  --set grafana.serviceName=grafana --set service.type=ClusterIP " #--namespace grafana --set persistence.storageClassName='gp2'
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install grafana stable/grafana --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values custom-values.yaml  --set grafana.serviceName=grafana --set service.type=ClusterIP --namespace grafana --set persistence.storageClassName='gp2'"
 #deploy Loki
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install loki grafana/loki --namespace=grafana --set loki.serviceName=loki"
 #deploy Promteil
