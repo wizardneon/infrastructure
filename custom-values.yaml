@@ -17,16 +17,16 @@ grafana:
   rbac:
     pspUseAppArmor: false
 
-ingress:
-  enabled: true
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
-    nginx.ingress.kubernetes.io/use-regex: "true"
-
-  path: /grafana/?(.*)
-  hosts:
-    - wizardneon.link
+#ingress:
+#  enabled: true
+#  annotations:
+#    kubernetes.io/ingress.class: "nginx"
+#    nginx.ingress.kubernetes.io/rewrite-target: /$1
+#    nginx.ingress.kubernetes.io/use-regex: "true"
+#
+#  path: /grafana/?(.*)
+#  hosts:
+#    - wizardneon.link
 
 grafana.ini:
   server:
