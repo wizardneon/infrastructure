@@ -8,9 +8,10 @@ metadata:
 
 
 spec:
-  rules:
-  - host: wizardneon.link
-    http:
+  IngressClassName: nginx
+  rules:      
+   - host: wizardneon.link
+     http:
       paths:
       - pathType: Prefix
         path: /grafana/
