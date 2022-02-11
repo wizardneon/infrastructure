@@ -129,8 +129,8 @@
 
 
 #deploy ingress resource for grafana
-      - scp ./ingress_grafana.yaml ubuntu@$BASTION_IP:~/
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f ./ingress_grafana.yaml -n grafana"
+#      - scp ./ingress_grafana.yaml ubuntu@$BASTION_IP:~/
+#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f ./ingress_grafana.yaml -n grafana"
       
       - scp route53.sh ubuntu@$BASTION_IP:~/
 #      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "bash route53.sh | exit 0"
