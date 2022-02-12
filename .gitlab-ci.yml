@@ -6,7 +6,6 @@
      - 'AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}'
      - 'AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}'
      - 'AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}'
-
  stages:
    - plan_validate
    - deploy
@@ -14,18 +13,15 @@
    - deploy_app
    - destroy_app
    - destroy
-
  before_script:
    - rm -rf .terraform
    - terraform --version
    - terraform init
-
  build:
    stage: plan_validate
    script:
      - terraform validate
      - terraform plan
-
  deploy:
    stage: deploy
    when: manual
@@ -71,17 +67,13 @@
 # copy kubeconfig & config_map to bastion node
      - terraform output kubeconfig > kubeconfig && terraform output config_map_aws_auth > config_map_aws_auth.yaml
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "mkdir -p ~/.kube"
-
      - scp kubeconfig ubuntu@$BASTION_IP:~/.kube/config
      - scp config_map_aws_auth.yaml ubuntu@$BASTION_IP:~/
-
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sed -i '1d;$d' ~/config_map_aws_auth.yaml"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "grep -v 'EOT' ~/config_map_aws_auth.yaml > ~/1 && mv ~/1 ~/config_map_aws_auth.yaml"
-     
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "grep -v 'EOT' ~/config_map_aws_auth.yaml > ~/1 && mv ~/1 ~/config_map_aws_auth.yaml"     
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "sed -i '1d;$d' ~/.kube/config"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "grep -v 'EOT' ~/.kube/config > ~/.kube/1 && mv ~/.kube/1 ~/.kube/config"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f config_map_aws_auth.yaml"
-    
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f config_map_aws_auth.yaml"    
 # install HELM
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm version --short"
@@ -96,12 +88,12 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "export K9S_EDITOR=nano"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "export EDITOR=nano"
 # create namespace for app
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace dev"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace prod"     
-   dependencies:
-     - deploy
-
-
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana --dry-run=client -o yaml | kubectl apply -f -"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace prod --dry-run=client -o yaml | kubectl apply -f -"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f -"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -"            
+#   dependencies:
+#     - deploy
  deploy_monitoring_log:
    stage: deploy_app
    when: manual
@@ -112,13 +104,8 @@
       - chmod 600 ~/.ssh/id_rsa
       - eval $(ssh-agent -s)
       - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana --dry-run=client -o yaml | kubectl apply -f -"
 # deploy Prometheus
- #     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install prometheus stable/prometheus --namespace grafana --set alertmanager.persistentVolume.storageClass='gp2' --set server.persistentVolume.storageClass='gp2'"
-
-
-#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install prometheus stable/prometheus --namespace grafana --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false --set alertmanager.persistentVolume.storageClass='gp2' --set server.persistentVolume.storageClass='gp2'"
-
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install prometheus stable/prometheus --namespace grafana --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false --set alertmanager.persistentVolume.storageClass='gp2' --set server.persistentVolume.storageClass='gp2'"
 #deploy graphana
       - scp custom-values.yaml ubuntu@$BASTION_IP:~/
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install grafana stable/grafana --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values custom-values.yaml  --set grafana.serviceName=grafana --set service.type=ClusterIP --namespace grafana --set persistence.storageClassName='gp2'"
@@ -126,22 +113,13 @@
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install lki grafana/loki --namespace=grafana --set loki.serviceName=loki"
 #deploy Promteil
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install promtail grafana/promtail --namespace=grafana"  
-#deploy ingress old
-
-#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/aws/deploy.yaml" 
-
-#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-0.32.0/deploy/static/provider/aws/deploy.yaml"
-
-
-#deploy ingress resource for grafana
-#      - scp ./ingress_grafana.yaml ubuntu@$BASTION_IP:~/
-#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f ./ingress_grafana.yaml -n grafana"
-      
+#deploy ingress
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install ingressnginx --version 2.3.0 ingress-nginx/ingress-nginx --namespace ingress-nginx --set controller.metrics.enabled=true --set-string controller.podAnnotations."prometheus\.io/scrape"="true" --set-string controller.podAnnotations."prometheus\.io/port"="10254"
+#attache route53     
       - scp route53.sh ubuntu@$BASTION_IP:~/
-#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "bash route53.sh | exit 0"
-   dependencies:
-     - deploy
-
+#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "bash route53.sh | exit 0"
+#   dependencies:
+#     - deploy
  destroy_app:
    stage: destroy_app
    when: manual
@@ -156,12 +134,9 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall promtail -n grafana"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall loki -n grafana"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall grafana -n grafana"
-#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/aws/deploy.yaml"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-0.32.0/deploy/static/provider/aws/deploy.yaml"
-
-   dependencies:
-     - deploy 
-
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall ingressnginx --version 2.3.0 ingress-nginx/ingress-nginx --namespace ingress-nginx"
+#   dependencies:
+#     - deploy 
  destroy:
    stage: destroy
    when: manual
