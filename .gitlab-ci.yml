@@ -114,7 +114,7 @@
 #deploy Promteil
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install promtail grafana/promtail --namespace=grafana"  
 #deploy ingress
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install ingressnginx --version 2.3.0 ingress-nginx/ingress-nginx --namespace ingress-nginx --set controller.metrics.enabled=true --set-string controller.podAnnotations."prometheus\.io/scrape"="true" --set-string controller.podAnnotations."prometheus\.io/port"="10254"
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install ingress-controller --version 2.3.0 ingress-nginx/ingress-nginx --namespace ingress-nginx --set controller.metrics.enabled=true --set-string controller.podAnnotations."prometheus\.io/scrape"="true" --set-string controller.podAnnotations."prometheus\.io/port"="10254"
 #attache route53     
       - scp route53.sh ubuntu@$BASTION_IP:~/
 #     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "bash route53.sh | exit 0"
@@ -134,7 +134,7 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall promtail -n grafana"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall loki -n grafana"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall grafana -n grafana"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall ingressnginx --version 2.3.0 ingress-nginx/ingress-nginx --namespace ingress-nginx"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall ingress-controller --version 2.3.0 ingress-nginx/ingress-nginx --namespace ingress-nginx"
 #   dependencies:
 #     - deploy 
  destroy:
