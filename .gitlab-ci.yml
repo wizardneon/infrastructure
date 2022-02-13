@@ -105,6 +105,13 @@
       - chmod 600 ~/.ssh/id_rsa
       - eval $(ssh-agent -s)
       - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+
+#deploy ingress
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install ingress --version 2.3.0 ingress-nginx/ingress-nginx --namespace ingress-nginx --set controller.metrics.enabled=true --set controller.metrics.serviceMonitor.enabled=true --set controller.metrics.serviceMonitor.additionalLabels.release="prometheus""
+#attache route53     
+      - scp route53.sh ubuntu@$BASTION_IP:~/
+#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "bash route53.sh | exit 0"
+      
 # deploy Prometheus
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install prometheus prometheus-community/kube-prometheus-stack --version 32.2.0 --namespace grafana --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false --set grafana.enabled=false"
 #deploy graphana
@@ -118,11 +125,6 @@
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install promtail grafana/promtail --namespace=grafana -f values.yaml"
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create -f eventrouter.yaml"
       
-#deploy ingress
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install ingress --version 2.3.0 ingress-nginx/ingress-nginx --namespace ingress-nginx --set controller.metrics.enabled=true --set controller.metrics.serviceMonitor.enabled=true --set controller.metrics.serviceMonitor.additionalLabels.release="prometheus""
-#attache route53     
-      - scp route53.sh ubuntu@$BASTION_IP:~/
-#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "bash route53.sh | exit 0"
 #   dependencies:
 #     - deploy
  destroy_app:
