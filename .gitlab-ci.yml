@@ -114,8 +114,9 @@
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install loki grafana/loki --namespace=grafana --set loki.serviceName=loki"
 #deploy Promteil
       - scp values.yaml ubuntu@$BASTION_IP:~/
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install promtail grafana/promtail --namespace=grafana -f values.yaml"  
-
+      - scp eventrouter.yaml ubuntu@$BASTION_IP:~/           
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install promtail grafana/promtail --namespace=grafana -f values.yaml"
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create -f eventrouter.yaml"
       
 #deploy ingress
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install ingress --version 2.3.0 ingress-nginx/ingress-nginx --namespace ingress-nginx --set controller.metrics.enabled=true --set controller.metrics.serviceMonitor.enabled=true --set controller.metrics.serviceMonitor.additionalLabels.release="prometheus""
