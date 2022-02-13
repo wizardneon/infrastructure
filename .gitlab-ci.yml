@@ -106,14 +106,16 @@
       - eval $(ssh-agent -s)
       - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
 
-#deploy ingress
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install ingress --version 2.3.0 ingress-nginx/ingress-nginx --namespace ingress-nginx --set controller.metrics.enabled=true --set controller.metrics.serviceMonitor.additionalLabels.release="prometheus" --set controller.metrics.serviceMonitor.enabled=true"
-#attache route53     
-      - scp route53.sh ubuntu@$BASTION_IP:~/
-#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "bash route53.sh | exit 0"
-      
 # deploy Prometheus
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install prometheus prometheus-community/kube-prometheus-stack --version 32.2.0 --namespace grafana --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false --set grafana.enabled=false"
+
+#deploy ingress
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install ingress --version 2.3.0 ingress-nginx/ingress-nginx --namespace ingress-nginx --set controller.metrics.enabled=true --set controller.metrics.serviceMonitor.additionalLabels.release="prometheus" --set controller.metrics.serviceMonitor.enabled=true"
+
+#attache route53     
+      - scp route53.sh ubuntu@$BASTION_IP:~/
+#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "bash route53.sh | exit 0"      
+
 #deploy graphana
       - scp custom-values.yaml ubuntu@$BASTION_IP:~/
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install grafana stable/grafana --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values custom-values.yaml  --set grafana.serviceName=grafana --set service.type=ClusterIP --namespace grafana --set persistence.storageClassName='gp2'"
