@@ -107,7 +107,7 @@
       - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
 
 #deploy ingress
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install ingress --version 2.3.0 ingress-nginx/ingress-nginx --namespace ingress-nginx --set controller.metrics.enabled=true --set controller.metrics.serviceMonitor.enabled=true --set controller.metrics.serviceMonitor.additionalLabels.release="prometheus""
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install ingress --version 2.3.0 ingress-nginx/ingress-nginx --namespace ingress-nginx --set controller.metrics.enabled=true --set controller.metrics.serviceMonitor.additionalLabels.release="prometheus" --set controller.metrics.serviceMonitor.enabled=true"
 #attache route53     
       - scp route53.sh ubuntu@$BASTION_IP:~/
 #     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "bash route53.sh | exit 0"
