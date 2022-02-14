@@ -128,7 +128,7 @@
       - scp values.yaml ubuntu@$BASTION_IP:~/
       - scp eventrouter.yaml ubuntu@$BASTION_IP:~/           
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install promtail grafana/promtail --namespace=grafana -f values.yaml"
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create -f eventrouter.yaml"
+#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create -f eventrouter.yaml"
       
 #   dependencies:
 #     - deploy
