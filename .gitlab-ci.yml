@@ -89,10 +89,10 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "export K9S_EDITOR=nano"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "export EDITOR=nano"
 # create namespace for app
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana --dry-run=client -o yaml | kubectl apply -f -"
+
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace prod --dry-run=client -o yaml | kubectl apply -f -"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f -"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -"            
+              
 #   dependencies:
 #     - deploy
  deploy_monitoring_log:
@@ -106,7 +106,8 @@
       - eval $(ssh-agent -s)
       - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
 
-     
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -"  
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana --dry-run=client -o yaml | kubectl apply -f -"      
 
 # deploy Prometheus
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install prometheus prometheus-community/kube-prometheus-stack --version 32.2.0 --namespace grafana --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false --set grafana.enabled=false"
@@ -146,9 +147,11 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall prometheus -n grafana"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall grafana -n grafana"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall ingress -n ingress-nginx"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete ns ingress-nginx"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall loki -n grafana"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall promtail -n grafana"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete -f eventrouter.yaml"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete ns grafana"
 #   dependencies:
 #     - deploy 
  destroy:
