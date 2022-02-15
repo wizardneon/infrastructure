@@ -1,5 +1,4 @@
 {
-"dashboard": {
   "__inputs": [
     {
       "name": "DS_PROMETHEUS",
@@ -979,14 +978,4 @@
   "title": "Request Handling Performance",
   "uid": "4GFbkOsZk",
   "version": 1
-},
-"inputs": [
-    {
-        "name":"DS_PROMETHEUS",
-        "pluginId":"prometheus",
-        "type":"datasource",
-        "value": "prometheus"
-    }
-],
-"overwrite" : true
 }
