@@ -80,7 +80,7 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm repo add stable https://charts.helm.sh/stable"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm repo add grafana https://grafana.github.io/helm-charts"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm repo add prometheus-community https://prometheus-community.github.io/helm-charts"
+     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm repo add prometheus-community https://prometheus-community.github.io/helm-charts"                                                       
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm repo update"  
 # install k9s
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "wget -qO-  https://github.com/derailed/k9s/releases/download/v0.25.18/k9s_Linux_x86_64.tar.gz | tar zxvf -  -C /tmp/"
@@ -107,13 +107,14 @@
       - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana --dry-run=client -o yaml | kubectl apply -f -"      
 # deploy Prometheus
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install prometheus prometheus-community/kube-prometheus-stack --version 32.2.0 --namespace grafana --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false --set grafana.enabled=false"
-
+#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install prometheus prometheus-community/kube-prometheus-stack --version 32.2.0 --namespace grafana --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false --set grafana.enabled=false"
+      - scp valuesgraf.yaml ubuntu@$BASTION_IP:~/
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install grafana prometheus -community/kube-prometheus-stack --values valuesgraf.yaml
 #deploy graphana
-      - scp custom-values.yaml ubuntu@$BASTION_IP:~/
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install grafana --version 5.5.3 stable/grafana --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values custom-values.yaml  --set grafana.serviceName=grafana --set service.type=ClusterIP --namespace grafana --set persistence.storageClassName='gp2'"
-      - scp -r ./custom-dashboards ubuntu@$BASTION_IP:~/
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f ./custom-dashboards/custom-dashboards.yaml      
+#      - scp custom-values.yaml ubuntu@$BASTION_IP:~/         
+#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install grafana --version 5.5.3 stable/grafana --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values custom-values.yaml  --set grafana.serviceName=grafana --set service.type=ClusterIP --namespace grafana --set persistence.storageClassName='gp2'"
+#      - scp -r ./custom-dashboards ubuntu@$BASTION_IP:~/
+#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl apply -f ./custom-dashboards/custom-dashboards.yaml      
 
 #deploy ingress
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -"
