@@ -37,6 +37,8 @@ grafana.ini:
   server:
     root_url: http://localhost:80/grafana # this host can be localhost
 
-serverDashboardConfigmaps:
-  - example-dashboards    
-
+prometheus-stats:
+  #Ref: https://grafana.com/dashboards/11454
+  gnetId: 11454
+  revision: 14
+  datasource: Prometheus
