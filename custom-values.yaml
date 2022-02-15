@@ -32,3 +32,6 @@ grafana.ini:
   server:
     root_url: http://localhost:80/grafana # this host can be localhost
 
+serverDashboardConfigmaps:
+  - example-dashboards    
+
