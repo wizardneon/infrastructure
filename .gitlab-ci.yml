@@ -131,7 +131,7 @@
 
 
 #deploy Loki
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install loki --namespace=loki-stack loki/loki-stack"
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install loki grafana/loki-stack -n grafana"
 #deploy Promteil
 #      - scp values.yaml ubuntu@$BASTION_IP:~/
 #      - scp eventrouter.yaml ubuntu@$BASTION_IP:~/           
