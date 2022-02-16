@@ -155,7 +155,7 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete ns ingress-nginx"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall loki -n grafana"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall promtail -n grafana"
-     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete -f eventrouter.yaml"
+#    - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete -f eventrouter.yaml"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete ns grafana"
 #   dependencies:
 #     - deploy 
