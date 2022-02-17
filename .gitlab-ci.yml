@@ -28,13 +28,14 @@
    script:
      - terraform apply -auto-approve=true
 #create variables BASTION_IP    
-     - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}') >> deploy.env
+     - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}') 
 #output    
-     - terraform output kubeconfig 
+     - terraform output kubeconfig>>config.txt
      - terraform output     
    artifacts:
-     reports:
-       dotenv: deploy.env
+    paths:
+    - config.txt
+
 
 # this stage waiting "Inherit environment variables" development
 # https://gitlab.com/gitlab-org/gitlab/-/issues/22638#note_343416057
