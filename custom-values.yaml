@@ -28,6 +28,13 @@ grafana:
   rbac:
     pspUseAppArmor: false
 
+extraVolumeMounts: 
+    - name: grafana-volume
+      mountPath: /var/lib/grafana/dashboards
+      readOnly: true
+      existingClaim: volume-claim
+
+
 ingress:
   enabled: true
   annotations:
@@ -42,6 +49,7 @@ ingress:
 grafana.ini:
   server:
     root_url: http://localhost:80/grafana # this host can be localhost
+ 
 
 serverDashboardConfigmaps:
     - custom-dashboards    
