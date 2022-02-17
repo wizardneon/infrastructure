@@ -11,6 +11,12 @@ datasources:
       orgId: 1
       access: proxy
       isDefault: true 
+
+providers:
+  - name: 'Default'
+    folder: 'Services'
+    options:
+      path: /etc/grafana/provisioning/dashboards
             
 
 grafana:
