@@ -16,8 +16,14 @@ providers:
   - name: 'Default'
     folder: 'Services'
     options:
-      path: /etc/grafana/provisioning/dashboards
-            
+      path: /var/lib/grafana/dashboards
+
+Persistence:
+  type: pvc
+  enabled: true
+  storageClassName: gp2
+  accessModes:
+    - ReadWriteOnce            
 
 grafana:
   enabled: true
