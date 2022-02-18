@@ -65,3 +65,4 @@ grafana.ini:
 
 serverDashboardConfigmaps:
     - custom-dashboards    
+serverDashboardFiles: {}    
