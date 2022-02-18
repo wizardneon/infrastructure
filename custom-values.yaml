@@ -62,15 +62,25 @@ serverDashboardConfigmaps:
     - custom-dashboards    
 serverDashboardFiles: {}    
 
-providers:
-  - name: 'custom'
-    orgId: 1
-    folder: ''
-    folderUid: ''
-    type: file
-    disableDeletion: false
-    updateIntervalSeconds: 5
-    allowUiUpdates: true
-    options:
-      path: /var/lib/grafana/
-      foldersFromFilesStructure: true
+dashboardProviders: 
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+    - name: 'default'
+      orgId: 1
+      folder: ''
+      type: file
+      disableDeletion: false
+      editable: true
+      options:
+        path: /var/lib/grafana/dashboards/default
+
+dashboards: 
+    default:
+      local-dashboard:
+       url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/nginx.json
+       token: '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'
+      prometheus-stats:
+        gnetId: 5225
+        revision: 7
+        datasource: Prometheus 
