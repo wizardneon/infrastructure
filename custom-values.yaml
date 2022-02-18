@@ -10,10 +10,15 @@ datasources:
       url: http://prometheus-kube-prometheus-prometheus:9090
       orgId: 1
       access: proxy
-      isDefault: true 
+      isDefault: true
 
+    - name: loki
+      type: loki
+      url: http://loki:3100
+#      orgId: 1
+#      access: proxy
+#      isDefault: true       
 
-          
 
 grafana:
   enabled: true
