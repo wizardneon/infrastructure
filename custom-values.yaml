@@ -82,14 +82,45 @@ dashboardProviders:
 
 dashboards: 
     default:
-      local-dashboard:
-       - url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/nginx.json
-         token: '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'
+      nginx:
+        url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/nginx.json
+        token: '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'
 
-       - url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/request-handling-performance.json
-         token: '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'
+      request-handling-performance:
+        url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/request-handling-performance.json
+        token: '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'   
 
-      prometheus-stats:
+      Kubernetes Deployments:
         gnetId: 5225
         revision: 7
+        datasource: Prometheus
+
+      Cluster Monitoring for Kubernetes:
+        gnetId: 10000
+        revision: 1
+        datasource: Prometheus
+
+      Kubernetes Ingress Nginx:
+        gnetId: 11875
+        revision: 1
+        datasource: Prometheus
+
+      Analysis by Pod:
+        gnetId: 6879
+        revision: 1
+        datasource: Prometheus
+
+      K8 Cluster Detail Dashboard:
+        gnetId: 10856
+        revision: 1
+        datasource: Prometheus
+
+      Kubernetes Cluster:
+        gnetId: 7249
+        revision: 1
         datasource: Prometheus 
+
+      Loki Dashboard quick search:
+        gnetId: 12019
+        revision: 2
+        datasource: loki               
