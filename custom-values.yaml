@@ -41,11 +41,6 @@ grafana:
 #      mountPath: /var/lib/grafana/dashboards
 #      readOnly: false
 
-providers:
-  - name: 'Default'
-    folder: 'Services'
-    options:
-      path: /var/lib/grafana
 
 ingress:
   enabled: true
