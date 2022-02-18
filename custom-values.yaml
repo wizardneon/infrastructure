@@ -83,8 +83,12 @@ dashboardProviders:
 dashboards: 
     default:
       local-dashboard:
-       url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/nginx.json
-       token: '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'
+       - url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/nginx.json
+         token: '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'
+
+       - url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/request-handling-performance.json
+         token: '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'
+
       prometheus-stats:
         gnetId: 5225
         revision: 7
