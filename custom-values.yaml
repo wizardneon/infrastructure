@@ -10,14 +10,10 @@ datasources:
       url: http://prometheus-kube-prometheus-prometheus:9090
       orgId: 1
       access: proxy
-      isDefault: true
+      isDefault: true 
 
-#    - name: loki
-#      type: loki
-#      url: http://loki:3100
-#      orgId: 1
-#      access: proxy
-#      isDefault: true   
+
+          
 
 grafana:
   enabled: true
@@ -27,6 +23,23 @@ grafana:
   # set pspUseAppArmor to false to fix Grafana pod Init errors
   rbac:
     pspUseAppArmor: false
+
+#Persistence:
+#  type: pvc
+#  enabled: true
+#  storageClassName: gp2
+#  accessModes:
+#    - ReadWriteOnce 
+#  finalizers:
+#    - kubernetes.io/pvc-protection
+#  existingClaim: grafana-volume
+#selectorLabels: {}
+#subPath: ""    
+
+#extraVolumeMounts: 
+#    - name: grafana-volume
+#      mountPath: /var/lib/grafana/dashboards
+#      readOnly: false
 
 
 ingress:
@@ -44,6 +57,7 @@ grafana.ini:
   server:
     root_url: http://localhost:80/grafana # this host can be localhost
  
+
 serverDashboardConfigmaps:
     - custom-dashboards    
 serverDashboardFiles: {}    
@@ -64,34 +78,9 @@ dashboardProviders:
 dashboards: 
     default:
       local-dashboard:
-      - url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/nginx.json
-        token: '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'
-
-#      - url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/request-handling-performance.json
-#        token: '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'
-
+       url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/nginx.json
+       token: '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'
       prometheus-stats:
-
-      - gnetId: 5225
+        gnetId: 5225
         revision: 7
         datasource: Prometheus 
-
-#      - gnetId: 10000
-#        revision: 1
-#        datasource: Prometheus 
-
-#      - gnetId: 11875
-#        revision: 1
-#        datasource: Prometheus         
-
-#      - gnetId: 6879
-#        revision: 1
-#        datasource: Prometheus 
-
-#      - gnetId: 10856
-#        revision: 1
-#        datasource: Prometheus  
-
-#      - gnetId: 7249
-#        revision: 1
-#        datasource: Prometheus               
