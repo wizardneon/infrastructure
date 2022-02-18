@@ -45,9 +45,7 @@ providers:
   - name: 'Default'
     folder: 'Services'
     options:
-      path: /var/lib/grafana/dashboards      
-
-
+      path: /var/lib/grafana
 
 ingress:
   enabled: true
