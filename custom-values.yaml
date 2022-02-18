@@ -28,7 +28,7 @@ Persistence:
 grafana:
   enabled: true
   defaultDashboardsEnabled: true
-  adminPassword: wizardneon13
+  adminPassword: passwd
   namespaceOverride: ""
   # set pspUseAppArmor to false to fix Grafana pod Init errors
   rbac:
