@@ -1,7 +1,24 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: custom-dashboards
+  namespace: grafana
+  name: nginx
+  annotations:
+      multicluster:
+        global:
+          enabled: false
+        etcd:
+          enabled: false
+      provider:
+        allowUiUpdates: false
+      datasources:
+      enabled: true
+      defaultDatasourceEnabled: true
+ 
+  labels: 
+      grafana_dashboard: "true"
+      app: grafana
+
 data:
   rpi-dashboard.json: |-
     {
