@@ -61,3 +61,16 @@ grafana.ini:
 serverDashboardConfigmaps:
     - custom-dashboards    
 serverDashboardFiles: {}    
+
+providers:
+  - name: 'custom'
+    orgId: 1
+    folder: ''
+    folderUid: ''
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/
+      foldersFromFilesStructure: true
