@@ -19,16 +19,18 @@ providers:
       path: /var/lib/grafana/dashboards
 
 
-#Persistence:
-#  type: pvc
-#  enabled: true
-#  storageClassName: gp2
-#  accessModes:
-#    - ReadWriteOnce 
-#  existingClaim: volume-claim
-# selectorLabels: {}
-# subPath: ""
-# existingClaim:             
+Persistence:
+  type: pvc
+  enabled: true
+  storageClassName: gp2
+  accessModes:
+    - ReadWriteOnce 
+  finalizers:
+    - kubernetes.io/pvc-protection
+  existingClaim: grafana-volume
+#selectorLabels: {}
+#subPath: ""
+           
 
 grafana:
   enabled: true
