@@ -37,7 +37,7 @@ grafana:
 extraVolumeMounts: 
     - name: grafana-volume
       mountPath: /var/lib/grafana/dashboards
-      readOnly: true
+      readOnly: false
       existingClaim: volume-claim
 
 
