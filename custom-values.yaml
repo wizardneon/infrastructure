@@ -18,6 +18,7 @@ providers:
     options:
       path: /var/lib/grafana/dashboards
 
+
 Persistence:
   type: pvc
   enabled: true
@@ -38,7 +39,7 @@ extraVolumeMounts:
     - name: grafana-volume
       mountPath: /var/lib/grafana/dashboards
       readOnly: false
-      existingClaim: volume-claim
+
 
 
 ingress:
