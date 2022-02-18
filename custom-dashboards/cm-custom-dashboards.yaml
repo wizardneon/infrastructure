@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: grafana
-  name: nginx 
+  name: custom-dashboard 
   labels: 
       grafana_dashboard: "true"
       app: grafana
