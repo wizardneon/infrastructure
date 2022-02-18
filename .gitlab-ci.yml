@@ -36,9 +36,8 @@
     paths:
     - config.txt
 
-
 # this stage waiting "Inherit environment variables" development
-# https://gitlab.com/gitlab-org/gitlab/-/issues/22638#note_343416057
+
  bastion-prep:
    stage: bastion-prep
    when: manual
@@ -110,18 +109,12 @@
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace grafana --dry-run=client -o yaml | kubectl apply -f -"      
 # deploy Prometheus
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install prometheus prometheus-community/kube-prometheus-stack --version 32.2.0 --namespace grafana --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false --set grafana.enabled=false"
-#deploy custom grafana
-
-#      - scp -r ./kube-prometheus-stack ubuntu@$BASTION_IP:~/ 
-#      - scp custom-values.yaml ubuntu@$BASTION_IP:~/  
-#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install grafana ./kube-prometheus-stack --set persistence.enabled=true --set adminPassword='$GRAF_PASS' --values custom-values.yaml  --set grafana.serviceName=grafana --set service.type=ClusterIP --namespace grafana --set persistence.storageClassName='gp2' --set kubeStateMetrics.enabled=false --set nodeExporter.enabled=false"
 
 #deploy graphana --version 5.5.3
       - sed -i "s~passwd~$GRAF_PASS~g" ./custom-values.yaml  
       - scp custom-values.yaml ubuntu@$BASTION_IP:~/
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install grafana stable/grafana --set adminPassword='$GRAF_PASS' --set persistence.enabled=true --set persistence.storageClassName='gp2' --values custom-values.yaml  --set grafana.serviceName=grafana --set service.type=ClusterIP --namespace grafana"
-      - scp -r ./custom-dashboards ubuntu@$BASTION_IP:~/
-      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create -f ./custom-dashboards -n grafana || exit 0"     
+     
 
 #deploy ingress
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -"
@@ -134,14 +127,7 @@
 
 #deploy Loki
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install loki grafana/loki-stack -n grafana"
-#deploy Promteil
-#      - scp values.yaml ubuntu@$BASTION_IP:~/
-#      - scp eventrouter.yaml ubuntu@$BASTION_IP:~/           
 
-#      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl create -f eventrouter.yaml"
-      
-#   dependencies:
-#     - deploy
  destroy_app:
    stage: destroy_app
    when: manual
@@ -157,11 +143,8 @@
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall ingress -n ingress-nginx"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete ns ingress-nginx"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall loki -n grafana"
-#    - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm uninstall promtail -n grafana"
-#    - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete -f eventrouter.yaml"
      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "kubectl delete ns grafana"
-#   dependencies:
-#     - deploy 
+
  destroy:
    stage: destroy
    when: manual
