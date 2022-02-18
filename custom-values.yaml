@@ -19,12 +19,16 @@ providers:
       path: /var/lib/grafana/dashboards
 
 
-Persistence:
-  type: pvc
-  enabled: true
-  storageClassName: gp2
-  accessModes:
-    - ReadWriteOnce            
+#Persistence:
+#  type: pvc
+#  enabled: true
+#  storageClassName: gp2
+#  accessModes:
+#    - ReadWriteOnce 
+#  existingClaim: volume-claim
+# selectorLabels: {}
+# subPath: ""
+# existingClaim:             
 
 grafana:
   enabled: true
