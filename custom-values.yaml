@@ -12,25 +12,8 @@ datasources:
       access: proxy
       isDefault: true 
 
-providers:
-  - name: 'Default'
-    folder: 'Services'
-    options:
-      path: /var/lib/grafana/dashboards
 
-
-Persistence:
-  type: pvc
-  enabled: true
-  storageClassName: gp2
-  accessModes:
-    - ReadWriteOnce 
-  finalizers:
-    - kubernetes.io/pvc-protection
-  existingClaim: grafana-volume
-#selectorLabels: {}
-#subPath: ""
-           
+          
 
 grafana:
   enabled: true
@@ -41,10 +24,28 @@ grafana:
   rbac:
     pspUseAppArmor: false
 
-extraVolumeMounts: 
-    - name: grafana-volume
-      mountPath: /var/lib/grafana/dashboards
-      readOnly: false
+#Persistence:
+#  type: pvc
+#  enabled: true
+#  storageClassName: gp2
+#  accessModes:
+#    - ReadWriteOnce 
+#  finalizers:
+#    - kubernetes.io/pvc-protection
+#  existingClaim: grafana-volume
+#selectorLabels: {}
+#subPath: ""    
+
+#extraVolumeMounts: 
+#    - name: grafana-volume
+#      mountPath: /var/lib/grafana/dashboards
+#      readOnly: false
+
+providers:
+  - name: 'Default'
+    folder: 'Services'
+    options:
+      path: /var/lib/grafana/dashboards      
 
 
 
