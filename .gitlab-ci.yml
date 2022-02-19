@@ -122,7 +122,7 @@
 
 #attache route53     
       - scp route53.sh ubuntu@$BASTION_IP:~/
-#     - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "bash route53.sh | exit 0"      
+      - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "bash route53.sh | exit 0"      
 
 
 #deploy Loki
