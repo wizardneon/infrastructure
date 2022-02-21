@@ -16,6 +16,9 @@
  before_script:
    - rm -rf .terraform
    - terraform --version
+   - sed -i "s~dbuser~$DATABASE_USER~g" ./variables.tf 
+   - sed -i "s~dbname~$DATABASE_NAME~g" ./variables.tf 
+   - sed -i "s~dbpasswoed~$DATABASE_PASSWORD~g" ./variables.tf 
    - terraform init
  build:
    stage: plan_validate
@@ -24,10 +27,6 @@
      - terraform plan
  deploy:
    stage: deploy
-   before_script:
-     - sed -i "s~dbuser~$DATABASE_USER~g" ./variables.tf 
-     - sed -i "s~dbname~$DATABASE_NAME~g" ./variables.tf 
-     - sed -i "s~dbpasswoed~$DATABASE_PASSWORD~g" ./variables.tf 
    when: manual
    script:
      - terraform init   
