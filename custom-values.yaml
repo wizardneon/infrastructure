@@ -15,9 +15,7 @@ datasources:
     - name: loki
       type: loki
       url: http://loki:3100
-#      orgId: 1
-#      access: proxy
-#      isDefault: true       
+      
 
 
 grafana:
@@ -28,23 +26,6 @@ grafana:
   # set pspUseAppArmor to false to fix Grafana pod Init errors
   rbac:
     pspUseAppArmor: false
-
-#Persistence:
-#  type: pvc
-#  enabled: true
-#  storageClassName: gp2
-#  accessModes:
-#    - ReadWriteOnce 
-#  finalizers:
-#    - kubernetes.io/pvc-protection
-#  existingClaim: grafana-volume
-#selectorLabels: {}
-#subPath: ""    
-
-#extraVolumeMounts: 
-#    - name: grafana-volume
-#      mountPath: /var/lib/grafana/dashboards
-#      readOnly: false
 
 
 ingress:
