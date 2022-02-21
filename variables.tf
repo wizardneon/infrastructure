@@ -13,6 +13,11 @@ variable "k8s_bastion_node_instance_type" {
   type    = string
 }
 
+variable "k8s_worker_node_instance_type" {
+  default = "t2.large"
+  type    = string
+}
+
 variable "k8s_bastion_node_ami" {
   default = "ami-035966e8adab4aaad"
   type    = string
