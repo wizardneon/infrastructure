@@ -24,17 +24,17 @@ variable "k8s_bastion_node_key_name" {
 }
 
 variable "worker_nodes_desired_size" {
-  default = "1"
+  default = "2"
   type    = string
 }
 
 variable "worker_nodes_max_size" {
-  default = "1"
+  default = "2"
   type    = string
 }
 
 variable "worker_nodes_min_size" {
-  default = "1"
+  default = "2"
   type    = string
 }
 
