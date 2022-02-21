@@ -19,6 +19,7 @@
    - sed -i "s~dbuser~$DATABASE_USER~g" ./variables.tf 
    - sed -i "s~dbname~$DATABASE_NAME~g" ./variables.tf 
    - sed -i "s~dbpasswoed~$DATABASE_PASSWORD~g" ./variables.tf 
+   - cat ./variables.tf
    - terraform init
  build:
    stage: plan_validate
@@ -28,8 +29,7 @@
  deploy:
    stage: deploy
    when: manual
-   script:
-     - terraform init   
+   script: 
      - terraform apply -auto-approve=true
 #create variables BASTION_IP    
      - BASTION_IP=$(terraform output -json bastion_eip | awk -F'[(")]' '{print $2}') 
