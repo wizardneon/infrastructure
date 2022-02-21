@@ -44,17 +44,17 @@ variable "repo_name" {
 }
 
 variable "DATABASE_NAME" {
-  default = "postgres"
+  default = "dbname"
   type    = string
 }
 
 variable "DATABASE_USER" {
-  default = "postgres"
+  default = "dbuser"
   type    = string
 }
 
 variable "DATABASE_PASSWORD" {
-  default = "wizardneon13"
+  default = "dbpassword"
   type    = string
 }
 
