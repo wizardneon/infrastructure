@@ -50,7 +50,7 @@ resource "aws_iam_role_policy_attachment" "k8s-cluster-AmazonEKSServicePolicy" {
 resource "aws_eks_node_group" "k8s" {
   cluster_name    = aws_eks_cluster.k8s.name
   node_group_name = "k8s"
-  instance_types  = var.k8s_worker_node_instance_type
+  instance_types  = [var.k8s_worker_node_instance_type]
   node_role_arn   = aws_iam_role.k8s-worker-node.arn
   subnet_ids      = aws_subnet.k8s[*].id
 
