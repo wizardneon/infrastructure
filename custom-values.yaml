@@ -84,11 +84,11 @@ dashboards:
     default:
       nginx:
         url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/nginx.json
-        token: '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'
+        token: gittoken
 
       request-handling-performance:
         url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/request-handling-performance.json
-        token: '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'   
+        token: gittoken   
 
       Kubernetes Deployments:
         gnetId: 5225
