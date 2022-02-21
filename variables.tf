@@ -29,7 +29,7 @@ variable "worker_nodes_desired_size" {
 }
 
 variable "worker_nodes_max_size" {
-  default = "1"
+  default = "2"
   type    = string
 }
 
