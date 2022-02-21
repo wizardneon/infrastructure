@@ -155,33 +155,33 @@ resource "aws_iam_role_policy_attachment" "k8s_bastion_node-AmazonEC2FullAccess"
 }
 
 #OIDC
-data "external" "thumb" {
-  program = [ "./get_thumbprint.sh", var.aws_region ]
-}
-
-resource "aws_iam_openid_connect_provider" "oidc" {
-  client_id_list  = ["sts.amazonaws.com"]
-  thumbprint_list = [data.external.thumb.result.thumbprint]
-  url             = aws_eks_cluster.k8s.identity.0.oidc.0.issuer
-}
-
-data "aws_caller_identity" "current" {}
-
-data "aws_iam_policy_document" "oidc_assume_role_policy" {
-  statement {
-    actions = ["sts:AssumeRoleWithWebIdentity"]
-    effect  = "Allow"
-
-    condition {
-      test     = "StringEquals"
-      variable = "${replace(aws_iam_openid_connect_provider.oidc.url, "https://", "")}:sub"
-      values   = ["sts.amazonaws.com"]
+#data "external" "thumb" {
+#  program = [ "./get_thumbprint.sh", var.aws_region ]
+#}
+#
+#resource "aws_iam_openid_connect_provider" "oidc" {
+#  client_id_list  = ["sts.amazonaws.com"]
+#  thumbprint_list = [data.external.thumb.result.thumbprint]
+#  url             = aws_eks_cluster.k8s.identity.0.oidc.0.issuer
+#}
+#
+#data "aws_caller_identity" "current" {}
+#
+#data "aws_iam_policy_document" "oidc_assume_role_policy" {
+#  statement {
+#    actions = ["sts:AssumeRoleWithWebIdentity"]
+#    effect  = "Allow"
+#
+#    condition {
+#      test     = "StringEquals"
+#      variable = "${replace(aws_iam_openid_connect_provider.oidc.url, "https://", "")}:sub"
+#      values   = ["sts.amazonaws.com"]
 ##      values   = ["system:serviceaccount:kube-system:aws-node"]
-    }
-
-    principals {
-      identifiers = ["${aws_iam_openid_connect_provider.oidc.arn}"]
-      type        = "Federated"
-    }
-  }
-}
+#    }
+#
+#    principals {
+#      identifiers = ["${aws_iam_openid_connect_provider.oidc.arn}"]
+#      type        = "Federated"
+#    }
+#  }
+#}
