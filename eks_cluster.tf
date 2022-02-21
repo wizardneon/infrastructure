@@ -183,4 +183,4 @@ resource "aws_iam_role_policy_attachment" "k8s_bastion_node-AmazonEC2FullAccess"
 #      type        = "Federated"
 #    }
 #  }
-}
+#}
