@@ -153,7 +153,7 @@ resource "aws_iam_role_policy_attachment" "k8s_bastion_node-AmazonEC2FullAccess"
   role       = aws_iam_role.k8s_bastion_node.name
 }
 
- OIDC
+#OIDC
 data "external" "thumb" {
   program = [ "./get_thumbprint.sh", var.aws_region ]
 }
