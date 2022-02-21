@@ -110,6 +110,7 @@
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install prometheus prometheus-community/kube-prometheus-stack --version 32.2.0 --namespace grafana --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false --set grafana.enabled=false"
 
 #deploy graphana --version 5.5.3
+      - sed -i "s~gittoken~$GIT_TOKEN~g" ./custom-values.yaml    
       - sed -i "s~passwd~$GRAF_PASS~g" ./custom-values.yaml  
       - scp custom-values.yaml ubuntu@$BASTION_IP:~/
       - ssh -T -o "StrictHostKeyChecking no" -l ubuntu $BASTION_IP "helm upgrade --install grafana stable/grafana --set adminPassword='$GRAF_PASS' --set persistence.enabled=true --set persistence.storageClassName='gp2' --values custom-values.yaml  --set grafana.serviceName=grafana --set service.type=ClusterIP --namespace grafana"
