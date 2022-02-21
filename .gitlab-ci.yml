@@ -27,6 +27,7 @@
    stage: deploy
    when: manual
    script: 
+     - terraform init        
      - sed -i "s~dbuser~$DATABASE_USER~g" ./variables.tf 
      - sed -i "s~dbname~$DATABASE_NAME~g" ./variables.tf 
      - sed -i "s~dbpassword~$DATABASE_PASSWORD~g" ./variables.tf 
